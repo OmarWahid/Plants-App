@@ -65,34 +65,43 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(top: 45.h),
-            child: Text(
-              'Notification',
-              style: TextStyle(
-                fontSize: 19.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          'Notification',
+          style: TextStyle(
+            fontSize: 19.sp,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+
           ),
-          Expanded(
-            child: ListView.separated(
-              physics: const BouncingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return _buildItem(list[index]);
-                },
-                separatorBuilder: (context, index) {
-                  return Divider(
-                    color: Colors.grey,
-                    height: 3.h,
-                  );
-                },
-                itemCount: list.length),
-          )
-        ],
+        ),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 8.h,
+            ),
+            Expanded(
+              child: ListView.separated(
+                physics: const BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return _buildItem(list[index]);
+                  },
+                  separatorBuilder: (context, index) {
+                    return Divider(
+                      color: Colors.grey,
+                      height: 3.h,
+                    );
+                  },
+                  itemCount: list.length),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -30,6 +30,8 @@ class PlantsLayout extends StatelessWidget {
                   ? SvgPicture.asset(
                       'assets/icons/leave .svg',
                       color: Colors.white,
+                height: 30.h,
+                width: 30.h,
                     )
                   : SvgPicture.asset(
                       'assets/icons/leave .svg',
@@ -38,6 +40,7 @@ class PlantsLayout extends StatelessWidget {
                   ? SvgPicture.asset(
                       'assets/icons/qr-code.svg',
                       color: Colors.white,
+
                     )
                   : SvgPicture.asset(
                       'assets/icons/qr-code.svg',
@@ -46,6 +49,8 @@ class PlantsLayout extends StatelessWidget {
                   ? SvgPicture.asset(
                       'assets/icons/Home.svg',
                       color: Colors.white,
+                height: 30.h,
+                width: 30.h,
                     )
                   : SvgPicture.asset(
                       'assets/icons/Home.svg',
@@ -55,6 +60,8 @@ class PlantsLayout extends StatelessWidget {
                   ? SvgPicture.asset(
                       'assets/icons/all_notification.svg',
                       color: Colors.white,
+                height: 30.h,
+                width: 30.h,
                     )
                   : SvgPicture.asset(
                       'assets/icons/all_notification.svg',
@@ -63,6 +70,8 @@ class PlantsLayout extends StatelessWidget {
                   ? SvgPicture.asset(
                       'assets/icons/person.svg',
                       color: Colors.white,
+                height: 30.h,
+                width: 30.h,
                     )
                   : SvgPicture.asset(
                       'assets/icons/person.svg',
