@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -89,295 +90,147 @@ class PlantsCubit extends Cubit<PlantsState> {
   }
 
   Widget buildGridItem(model, index, context) {
-    return Stack(alignment: Alignment.topLeft, children: [
-      Container(
-        height: 400,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.r),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 10.w,
-              offset: Offset(0.w, 2.w),
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.r),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10.r),
+                child: Image.network('$BASE_URL${model.data![index].imageUrl!}',
+                    fit: BoxFit.cover, width: double.infinity,
+                    errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'assets/images/ex_plant.png',
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  );
+                }, loadingBuilder: (context, child, loadingProgress) {
+                  return loadingProgress == null
+                      ? child
+                      : const Center(
+                          child: CupertinoActivityIndicator(),
+                        );
+                }),
+              ),
             ),
-          ],
-        ),
-        child: SizedBox(
-          height: 300,
-          child: Padding(
-            padding: EdgeInsets.all(18.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            SizedBox(
+              height: 6.h,
+            ),
+            Row(
               children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 10.h),
-                  child: Row(
-                    children: [
-                      const Spacer(),
-                      InkWell(
-                        onTap: () {
-                          PlantsCubit.get(context).changeCountCartMinus();
-                        },
-                        child: Container(
-                            width: 22.h,
-                            height: 22.h,
-                            color: Colors.grey.shade200,
-                            child: FittedBox(
-                              child: Text('-',
-                                  style: TextStyle(
-                                      fontSize: 22.sp,
-                                      fontWeight: FontWeight.w900,
-                                      color: Colors.grey,
-                                      fontFamily: 'Roboto')),
-                            )),
-                      ),
-                      SizedBox(
-                        width: 4.w,
-                      ),
-                      Text(
-                        '${PlantsCubit.get(context).count}',
-                        style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                            fontStyle: FontStyle.normal,
-                            fontFamily: 'Roboto'),
-                      ),
-                      SizedBox(
-                        width: 4.w,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          PlantsCubit.get(context).changeCountCartPlus();
-                        },
-                        child: Container(
-                            width: 22.h,
-                            height: 22.h,
-                            color: Colors.grey.shade200,
-                            child: FittedBox(
-                              child: Text('+',
-                                  style: TextStyle(
-                                      fontSize: 22.sp,
-                                      fontWeight: FontWeight.w900,
-                                      color: Colors.grey,
-                                      fontFamily: 'Roboto')),
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
                 const Spacer(),
-                FittedBox(
-                  child: Text(
-                    model.data![index].name!,
-                    style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                        fontStyle: FontStyle.normal,
-                        fontFamily: 'Roboto'),
-                  ),
+                InkWell(
+                  onTap: () {
+               //     PlantsCubit.get(context).changeCountCartMinus();
+                  },
+                  child: Container(
+                      width: 22.h,
+                      height: 22.h,
+                      color: Colors.grey.shade200,
+                      child: FittedBox(
+                        child: Text('-',
+                            style: TextStyle(
+                                fontSize: 22.sp,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.grey,
+                                fontFamily: 'Roboto')),
+                      )),
+                ),
+                SizedBox(
+                  width: 4.w,
                 ),
                 Text(
-                  model.data![index].description!,
+                  '${PlantsCubit.get(context).count}',
                   style: TextStyle(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w500,
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
                       color: Colors.black,
                       fontStyle: FontStyle.normal,
                       fontFamily: 'Roboto'),
                 ),
                 SizedBox(
-                  height: 8.h,
+                  width: 4.w,
                 ),
-                Container(
-                  width: double.infinity,
-                  height: 35.h,
-                  decoration: BoxDecoration(
-                    color: PrimaryGreen,
-                    borderRadius: BorderRadius.circular(10.r),
-                  ),
-                  child: MaterialButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Add To Cart',
-                      style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14.sp,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
+                InkWell(
+                  onTap: () {
+                  //  PlantsCubit.get(context).changeCountCartPlus();
+                  },
+                  child: Container(
+                      width: 22.h,
+                      height: 22.h,
+                      color: Colors.grey.shade200,
+                      child: FittedBox(
+                        child: Text('+',
+                            style: TextStyle(
+                                fontSize: 22.sp,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.grey,
+                                fontFamily: 'Roboto')),
+                      )),
                 ),
               ],
             ),
-          ),
+            SizedBox(
+              height: 6.h,
+            ),
+            FittedBox(
+              child: Text(
+                model.data![index].name!,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                    fontStyle: FontStyle.normal,
+                    fontFamily: 'Roboto'),
+              ),
+            ),
+            Text(
+              model.data![index].description!,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                  fontStyle: FontStyle.normal,
+                  fontFamily: 'Roboto'),
+            ),
+            SizedBox(
+              height: 8.h,
+            ),
+            Container(
+              width: double.infinity,
+              height: 35.h,
+              decoration: BoxDecoration(
+                color: PrimaryGreen,
+                borderRadius: BorderRadius.circular(10.r),
+              ),
+              child: MaterialButton(
+                onPressed: () {},
+                child: Text(
+                  'Add To Cart',
+                  style: TextStyle(
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14.sp,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
-      Container(
-        width: 110.w,
-        height: 200.h,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.r),
-          image: DecorationImage(
-            image: NetworkImage('$BASE_URL${model.data![index].imageUrl!}'),
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-    ]);
-
-    //     return Card(
-//       elevation: 6.0,
-//       color: Colors.white,
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.circular(12.r),
-//       ),
-//       child: SizedBox(
-//         width: 176.w,
-//         height: 227.h,
-//
-//         child: Stack(
-//           alignment: Alignment.topLeft,
-//           children: [
-//             Padding(
-//               padding: EdgeInsets.only(
-//                 right: 14.w,
-//                 left: 14.w,
-//                 bottom: 20.h,
-//               ),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Padding(
-//                     padding: EdgeInsets.only(
-//                       top: 27.h,
-//                     ),
-//                     child: Row(
-//                       children: [
-//                         Spacer(),
-//                         InkWell(
-//                           onTap: () {
-//                             cubit.changeCountCartMinus();
-//                           },
-//                           child: Container(
-//                               width: 22.h,
-//                               height: 22.h,
-//                               color: Colors.grey.shade200,
-//                               child: FittedBox(
-//                                 child: Text('-',
-//                                     style: TextStyle(
-//                                         fontSize: 22.sp,
-//                                         fontWeight: FontWeight.w900,
-//                                         color: Colors.grey,
-//                                         fontFamily: 'Roboto')),
-//                               )),
-//                         ),
-//                         SizedBox(
-//                           width: 4.w,
-//                         ),
-//                         Text(
-//                           '${PlantsCubit
-//                               .get(context)
-//                               .count}',
-//                           style: TextStyle(
-//                               fontSize: 16.sp,
-//                               fontWeight: FontWeight.w600,
-//                               color: Colors.black,
-//                               fontStyle: FontStyle.normal,
-//                               fontFamily: 'Roboto'),
-//                         ),
-//                         SizedBox(
-//                           width: 4.w,
-//                         ),
-//
-//                         InkWell(
-//                           onTap: () {
-//                             cubit.changeCountCartPlus();
-//                           },
-//                           child: Container(
-//                               width: 22.h,
-//                               height: 22.h,
-//                               color: Colors.grey.shade200,
-//                               child: FittedBox(
-//                                 child: Text('+',
-//                                     style: TextStyle(
-//                                         fontSize: 22.sp,
-//                                         fontWeight: FontWeight.w900,
-//                                         color: Colors.grey,
-//                                         fontFamily: 'Roboto')),
-//                               )),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                   Spacer(),
-//
-//                   FittedBox(
-//                     child: Text(
-//                       'GARDENIA PLANT',
-//                       style: TextStyle(
-//                           fontSize: 16.sp,
-//                           fontWeight: FontWeight.w500,
-//                           color: Colors.black,
-//                           fontStyle: FontStyle.normal,
-//                           fontFamily: 'Roboto'),
-//                     ),
-//                   ),
-//                   Text(
-//                     '70 EGP',
-//                     style: TextStyle(
-//                         fontSize: 12.sp,
-//                         fontWeight: FontWeight.w500,
-//                         color: Colors.black,
-//                         fontStyle: FontStyle.normal,
-//                         fontFamily: 'Roboto'),
-//                   ),
-//                   SizedBox(
-//                     height: 8.h,
-//                   ),
-//                   Container(
-//                     width: double.infinity,
-//                     height: 48.h,
-//                     decoration: BoxDecoration(
-//                       color: PrimaryGreen,
-//                       borderRadius: BorderRadius.circular(10.r),
-//                     ),
-//                     child: MaterialButton(
-//                       onPressed: () {},
-//                       child: Text(
-//                         'Add To Cart',
-//                         style: TextStyle(
-//                           fontFamily: 'Roboto',
-//                           fontWeight: FontWeight.w500,
-//                           fontSize: 16.sp,
-//                           color: Colors.white,
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//             Container(
-//               width: 110.w,
-//               height: 200.h,
-//               decoration: BoxDecoration(
-//                 borderRadius: BorderRadius.circular(10.r),
-//                 image: DecorationImage(
-//                   image:  NetworkImage(
-// 'assets/images/ex_plant.png')                ,
-//                   fit: BoxFit.cover,
-//                 ),
-//               ),
-//             ),
-//
-//           ],
-//         ),
-//       ),
-//     );
+    );
   }
 
   List<Widget>? typeGridView(context) {

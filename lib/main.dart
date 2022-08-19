@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:plants_orange/modules/home_screen/home_cubit/plants_cubit.dart';
 import 'package:plants_orange/modules/login_screen/login_cubit/login_cubit.dart';
+import 'package:plants_orange/modules/login_screen/login_screen.dart';
 import 'package:plants_orange/modules/splash_screen/splash_screen.dart';
 import 'package:plants_orange/shared/bloc_observer.dart';
 import 'package:plants_orange/shared/component.dart';
@@ -17,6 +18,8 @@ void main()async {
    await CacheHelper.init();
   DioHelper.init();
   token = CacheHelper.getData(key: 'token');
+  isTimerWorking = CacheHelper.getData(key: 'isTimerWorking')??false;
+ // isTimerWorking = false ;
   print(token);
   Bloc.observer = MyBlocObserver();
   runApp(const MyApp());
@@ -44,6 +47,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               scaffoldBackgroundColor: Colors.white,
+          fontFamily: 'Roboto',
               appBarTheme: const AppBarTheme(
                 iconTheme: IconThemeData(
                   color: Colors.black,
@@ -58,7 +62,7 @@ class MyApp extends StatelessWidget {
 
             ),
             home: const SplashScreen(),
-            // home: const PlantsLayout(),
+            // home: const LoginScreen(),
           ),
         );
       },

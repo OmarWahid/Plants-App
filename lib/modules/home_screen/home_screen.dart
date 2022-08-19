@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:plants_orange/models/seeds_model.dart';
+import 'package:plants_orange/shared/component.dart';
 
-import '../../shared/constant.dart';
 import '../../style/colors.dart';
 import '../cart/cart_screen.dart';
+import '../exam_screen/exam_screen.dart';
 import '../search/search_screen.dart';
 import 'home_cubit/plants_cubit.dart';
 import 'home_cubit/plants_states.dart';
@@ -16,19 +16,25 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var cubit = PlantsCubit.get(context);
-
     return BlocConsumer<PlantsCubit, PlantsState>(
       listener: (context, state) {
         // TODO: implement listener
       },
       builder: (context, state) {
-        var cubit =PlantsCubit.get(context) ;
-        if (cubit.doneSeeds==false||cubit.donePlants==false||cubit.doneTools==false||cubit.doneAll==false||cubit.doneUser==false  ) {
+        var cubit = PlantsCubit.get(context);
+        if (cubit.doneSeeds == false ||
+            cubit.donePlants == false ||
+            cubit.doneTools == false ||
+            cubit.doneAll == false ||
+            cubit.doneUser == false) {
           return Center(
             child: CircularProgressIndicator(color: PrimaryGreen),
           );
         }
+        var width = MediaQuery.of(context).size.width;
+        print(
+          '////////////////////////// $isTimerWorking ////////////////',
+        );
 
         return SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -36,30 +42,83 @@ class HomeScreen extends StatelessWidget {
             children: [
               Center(
                 child: Padding(
-                  padding: EdgeInsets.only(top: 50.h),
-                  child: Stack(
-                    alignment: Alignment.center,
+                  padding: EdgeInsets.only(top: 60.h),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        'La Vie',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 27.sp,
-                          fontFamily: 'Meddon',
-                          fontStyle: FontStyle.normal,
-                        ),
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Text(
+                            'La Vie',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 27.sp,
+                              fontFamily: 'Meddon',
+                              fontStyle: FontStyle.normal,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 20.h),
+                            child: Image.asset(
+                              'assets/images/Plant Based Milk.png',
+                              height: 18.h,
+                              width: 27.w,
+                            ),
+                          ),
+                        ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 20.h),
-                        child:
-                            Image.asset('assets/images/Plant Based Milk.png'),
-                      ),
+                      if (isTimerWorking == false)
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: width * 0.184,
+                            right: width * 0.064,
+                          ),
+                          child: CircleAvatar(
+                            radius: 19.r,
+                            backgroundColor: PrimaryGreen,
+                            child: FittedBox(
+                              child: IconButton(
+                                icon: const Icon(
+                                  Icons.question_mark,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () async {
+                                  String refresh = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const ExamScreen(),
+                                    ),
+                                  );
+                                  if (refresh == 'refresh') {
+                                    cubit.getSeeds();
+                                    cubit.getPlants();
+                                    cubit.getTools();
+                                    cubit.getAll();
+                                    cubit.getUser();
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                        )
+                      else
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: width * 0.184,
+                            right: width * 0.064,
+                          ),
+                          child: CircleAvatar(
+                            radius: 19.r,
+                            backgroundColor: Colors.white,
+                          ),
+                        )
                     ],
                   ),
                 ),
               ),
               SizedBox(
-                height: 37.h,
+                height: 28.h,
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 18.w),
@@ -123,7 +182,6 @@ class HomeScreen extends StatelessWidget {
                           child: SvgPicture.asset(
                             'assets/icons/Cart.svg',
                             color: Colors.white,
-
                           ),
                         ),
                       ),
@@ -332,66 +390,19 @@ class HomeScreen extends StatelessWidget {
                     SizedBox(
                       width: 16.w,
                     ),
-                    cubit.buttonProducts
-                        ? OutlinedButton(
-                            onPressed: () {
-                              cubit.changeButtonProducts();
-                            },
-                            style: OutlinedButton.styleFrom(
-                              side: BorderSide(
-                                color: PrimaryGreen,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.r),
-                              ),
-                            ),
-                            child: Text(
-                              'Products',
-                              style: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w400,
-                                  color: PrimaryGreen,
-                                  fontFamily: 'Roboto'),
-                            ),
-                          )
-                        : OutlinedButton(
-                            onPressed: () {
-                              cubit.changeButtonProducts();
-                            },
-                            style: OutlinedButton.styleFrom(
-                              side: const BorderSide(
-                                color: Color(0xffF8F8F8),
-                              ),
-                              backgroundColor: const Color(0xffF8F8F8),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.r),
-                              ),
-                            ),
-                            child: Text(
-                              'Products',
-                              style: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: const Color(0xFF979797),
-                                  fontFamily: 'Roboto'),
-                            ),
-                          ),
-                    SizedBox(
-                      width: 16.w,
-                    ),
                   ],
                 ),
               ),
               SizedBox(
-                height: 34.h,
+                height: 16.h,
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 22.w),
+                padding: EdgeInsets.symmetric(horizontal: 18.w),
                 child: GridView.count(
                   crossAxisCount: 2,
                   childAspectRatio: 0.57.h,
-                  mainAxisSpacing: 16.w,
-                  crossAxisSpacing: 18.h,
+                  mainAxisSpacing: 9.w,
+                  crossAxisSpacing: 9.h,
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   children: cubit.typeGridView(context)!,
@@ -403,5 +414,4 @@ class HomeScreen extends StatelessWidget {
       },
     );
   }
-
 }

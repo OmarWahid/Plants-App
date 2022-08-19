@@ -61,7 +61,8 @@ class LoginScreen extends StatelessWidget {
         }
         if (state is RegisterSuccessState) {
           if (state.model.type == 'Success') {
-            CacheHelper.saveData(key: 'token', value: state.model.data!.accessToken)
+            CacheHelper.saveData(
+                    key: 'token', value: state.model.data!.accessToken)
                 .then((value) {
               token = state.model.data!.accessToken;
               Navigator.pushAndRemoveUntil(
@@ -69,7 +70,7 @@ class LoginScreen extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => const PlantsLayout(),
                   ),
-                      (route) => false);
+                  (route) => false);
             });
           } else {
             Fluttertoast.showToast(
@@ -102,23 +103,21 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-               Align(
-                 alignment: Alignment.topRight,
-                 child: Container(
-                   height: 169.h,
-                   width: 190.w,
-                   decoration: const BoxDecoration(
-                     image: DecorationImage(
-                       alignment: Alignment.topRight,
-                       image: AssetImage(
-                         'assets/images/image 68 (Traced).png',
-                       ),
-                     ),
-                   ),
-
-                 ),
-               ),
-
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Container(
+                      height: 169.h,
+                      width: 190.w,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          alignment: Alignment.topRight,
+                          image: AssetImage(
+                            'assets/images/image 68 (Traced).png',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   Center(
                     child: Stack(
                       alignment: Alignment.center,
@@ -135,7 +134,10 @@ class LoginScreen extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.only(bottom: 20.h),
                           child: Image.asset(
-                              'assets/images/Plant Based Milk.png'),
+                            'assets/images/Plant Based Milk.png',
+                            height: 18.h,
+                            width: 27.w,
+                          ),
                         ),
                       ],
                     ),
@@ -165,8 +167,8 @@ class LoginScreen extends StatelessWidget {
                                 Container(
                                   height: 3.h,
                                   width: 76.w,
-                                  color: Theme.of(context)
-                                      .scaffoldBackgroundColor,
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
                                 )
                               ],
                             )
@@ -234,8 +236,8 @@ class LoginScreen extends StatelessWidget {
                                 Container(
                                   height: 3.h,
                                   width: 60.w,
-                                  color: Theme.of(context)
-                                      .scaffoldBackgroundColor,
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
                                 )
                               ],
                             ),
@@ -278,16 +280,14 @@ class LoginScreen extends StatelessWidget {
                                     contentPadding: EdgeInsets.fromLTRB(
                                         10.w, 28.h, 10.w, 0.h),
                                     border: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(5.r),
+                                      borderRadius: BorderRadius.circular(5.r),
                                       borderSide: const BorderSide(
                                         style: BorderStyle.solid,
                                         color: Color(0xFF939393),
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(5.r),
+                                      borderRadius: BorderRadius.circular(5.r),
                                       borderSide: const BorderSide(
                                         color: Color(0xFF1ABC00),
                                         style: BorderStyle.solid,
@@ -337,16 +337,14 @@ class LoginScreen extends StatelessWidget {
                                     contentPadding: EdgeInsets.fromLTRB(
                                         10.w, 28.h, 10.w, 0.h),
                                     border: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(5.r),
+                                      borderRadius: BorderRadius.circular(5.r),
                                       borderSide: const BorderSide(
                                         style: BorderStyle.solid,
                                         color: Color(0xFF939393),
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(5.r),
+                                      borderRadius: BorderRadius.circular(5.r),
                                       borderSide: const BorderSide(
                                         color: Color(0xFF1ABC00),
                                         style: BorderStyle.solid,
@@ -376,8 +374,8 @@ class LoginScreen extends StatelessWidget {
                                             if (formController.currentState!
                                                 .validate()) {
                                               LoginCubit.get(context).userLogin(
-                                                  email: emailControllerLogin
-                                                      .text,
+                                                  email:
+                                                      emailControllerLogin.text,
                                                   password:
                                                       passwordControllerLogin
                                                           .text);
@@ -427,16 +425,14 @@ class LoginScreen extends StatelessWidget {
                                     contentPadding: EdgeInsets.fromLTRB(
                                         10.w, 28.h, 10.w, 0.h),
                                     border: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(5.r),
+                                      borderRadius: BorderRadius.circular(5.r),
                                       borderSide: const BorderSide(
                                         style: BorderStyle.solid,
                                         color: Color(0xFF939393),
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(5.r),
+                                      borderRadius: BorderRadius.circular(5.r),
                                       borderSide: const BorderSide(
                                         color: Color(0xFF1ABC00),
                                         style: BorderStyle.solid,
@@ -476,16 +472,14 @@ class LoginScreen extends StatelessWidget {
                                     contentPadding: EdgeInsets.fromLTRB(
                                         10.w, 28.h, 10.w, 0.h),
                                     border: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(5.r),
+                                      borderRadius: BorderRadius.circular(5.r),
                                       borderSide: const BorderSide(
                                         style: BorderStyle.solid,
                                         color: Color(0xFF939393),
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(5.r),
+                                      borderRadius: BorderRadius.circular(5.r),
                                       borderSide: const BorderSide(
                                         color: Color(0xFF1ABC00),
                                         style: BorderStyle.solid,
@@ -525,16 +519,14 @@ class LoginScreen extends StatelessWidget {
                                     contentPadding: EdgeInsets.fromLTRB(
                                         10.w, 28.h, 10.w, 0.h),
                                     border: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(5.r),
+                                      borderRadius: BorderRadius.circular(5.r),
                                       borderSide: const BorderSide(
                                         style: BorderStyle.solid,
                                         color: Color(0xFF939393),
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(5.r),
+                                      borderRadius: BorderRadius.circular(5.r),
                                       borderSide: const BorderSide(
                                         color: Color(0xFF1ABC00),
                                         style: BorderStyle.solid,
@@ -575,16 +567,14 @@ class LoginScreen extends StatelessWidget {
                                     contentPadding: EdgeInsets.fromLTRB(
                                         10.w, 28.h, 10.w, 0.h),
                                     border: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(5.r),
+                                      borderRadius: BorderRadius.circular(5.r),
                                       borderSide: const BorderSide(
                                         style: BorderStyle.solid,
                                         color: Color(0xFF939393),
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(5.r),
+                                      borderRadius: BorderRadius.circular(5.r),
                                       borderSide: const BorderSide(
                                         color: Color(0xFF1ABC00),
                                         style: BorderStyle.solid,
@@ -596,38 +586,44 @@ class LoginScreen extends StatelessWidget {
                                 SizedBox(
                                   height: 37.h,
                                 ),
-                                (state is RegisterLoadingState) ? Center(child: CircularProgressIndicator(color: PrimaryGreen,)) : Container(
-                                  width: double.infinity,
-                                  height: 48.h,
-                                  decoration: BoxDecoration(
-                                    color: PrimaryGreen,
-                                    borderRadius: BorderRadius.circular(5.r),
-                                  ),
-                                  child: MaterialButton(
-                                    onPressed: () {
-                                      if (formController.currentState!
-                                          .validate()) {
-                                        LoginCubit.get(context).userRegister(
-                                            fName: fNameController.text,
-                                            lName: lNameController.text,
-                                            email:
-                                                emailControllerRegister.text,
-                                            password:
-                                                passwordControllerRegister
-                                                    .text);
-                                      }
-                                    },
-                                    child: Text(
-                                      'Login',
-                                      style: TextStyle(
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 16.sp,
-                                        color: Colors.white,
+                                (state is RegisterLoadingState)
+                                    ? Center(
+                                        child: CircularProgressIndicator(
+                                        color: PrimaryGreen,
+                                      ))
+                                    : Container(
+                                        width: double.infinity,
+                                        height: 48.h,
+                                        decoration: BoxDecoration(
+                                          color: PrimaryGreen,
+                                          borderRadius:
+                                              BorderRadius.circular(5.r),
+                                        ),
+                                        child: MaterialButton(
+                                          onPressed: () {
+                                            if (formController.currentState!
+                                                .validate()) {
+                                              LoginCubit.get(context).userRegister(
+                                                  fName: fNameController.text,
+                                                  lName: lNameController.text,
+                                                  email: emailControllerRegister
+                                                      .text,
+                                                  password:
+                                                      passwordControllerRegister
+                                                          .text);
+                                            }
+                                          },
+                                          child: Text(
+                                            'Login',
+                                            style: TextStyle(
+                                              fontFamily: 'Roboto',
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16.sp,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ),
                               ],
                             )),
                   SizedBox(
@@ -683,7 +679,7 @@ class LoginScreen extends StatelessWidget {
                             color: Colors.white,
                             child: Image.asset('assets/images/Group 4.png'),
                           ),
-                          onTap: ()  {
+                          onTap: () {
                             LoginCubit.get(context).signIn();
                           },
                         ),
@@ -702,7 +698,6 @@ class LoginScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: Container(
@@ -716,11 +711,8 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-
                     ),
                   ),
-
-
                 ],
               ),
             ),
