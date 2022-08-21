@@ -26,7 +26,8 @@ class HomeScreen extends StatelessWidget {
             cubit.donePlants == false ||
             cubit.doneTools == false ||
             cubit.doneAll == false ||
-            cubit.doneUser == false) {
+            cubit.doneUser == false||
+            cubit.doneBlogs == false) {
           return Center(
             child: CircularProgressIndicator(color: PrimaryGreen),
           );

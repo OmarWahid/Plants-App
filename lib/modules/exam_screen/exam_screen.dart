@@ -119,7 +119,8 @@ class _ExamScreenState extends State<ExamScreen> {
   Widget itemPageView(ExamModel data) {
     return BlocConsumer<PlantsCubit, PlantsState>(
       listener: (context, state) {
-        // TODO: implement listener
+
+
       },
       builder: (context, state) {
         var cubit = PlantsCubit.get(context);
@@ -537,7 +538,7 @@ class _ExamScreenState extends State<ExamScreen> {
                               ),
                     ],
                   ),
-                ),////
+                ),
               ),
             ),
             SizedBox(

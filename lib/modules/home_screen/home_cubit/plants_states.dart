@@ -71,3 +71,10 @@ class UserErrorState extends PlantsState {
   UserErrorState(this.error);
 }
 class UserLoadingState extends PlantsState {}
+
+class BlogsSuccessState extends PlantsState {}
+class BlogsErrorState extends PlantsState {
+  final String error;
+  BlogsErrorState(this.error);
+}
+class BlogsLoadingState extends PlantsState {}

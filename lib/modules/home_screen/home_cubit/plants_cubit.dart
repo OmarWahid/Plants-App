@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:plants_orange/models/all_model.dart';
+import 'package:plants_orange/models/blogs_model.dart';
 import 'package:plants_orange/models/plants_model.dart';
 import 'package:plants_orange/models/seeds_model.dart';
 import 'package:plants_orange/models/tools_model.dart';
@@ -89,8 +90,164 @@ class PlantsCubit extends Cubit<PlantsState> {
     emit(StateButtonProducts());
   }
 
+  dynamic filterProducts(model){
+    if(model.seed ==null && model.tool ==null){
+      return model.plant;
+    }
+    else if(model.plant ==null && model.tool ==null){
+      return model.seed;
+    }
+    else {
+      return model.tool;
+    }
+  }
+
   Widget buildGridItem(model, index, context) {
-    return Card(
+    return   (model==allModel) ? Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.r),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10.r),
+                child: Image.network(
+                    '$BASE_URL${model.data![index].imageUrl!}',
+                    fit: BoxFit.cover, width: double.infinity,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        'assets/images/ex_plant.png',
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      );
+                    }, loadingBuilder: (context, child, loadingProgress) {
+                      return loadingProgress == null
+                          ? child
+                          :  Center(
+                        child: CupertinoActivityIndicator(
+                          color: PrimaryGreen,
+
+                        ),
+                      );
+                    }),
+              ),
+            ),
+            SizedBox(
+              height: 6.h,
+            ),
+            Row(
+              children: [
+                const Spacer(),
+                InkWell(
+                  onTap: () {
+                    //     PlantsCubit.get(context).changeCountCartMinus();
+                  },
+                  child: Container(
+                      width: 22.h,
+                      height: 22.h,
+                      color: Colors.grey.shade200,
+                      child: FittedBox(
+                        child: Text('-',
+                            style: TextStyle(
+                                fontSize: 22.sp,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.grey,
+                                fontFamily: 'Roboto')),
+                      )),
+                ),
+                SizedBox(
+                  width: 4.w,
+                ),
+                Text(
+                  '${PlantsCubit.get(context).count}',
+                  style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                      fontStyle: FontStyle.normal,
+                      fontFamily: 'Roboto'),
+                ),
+                SizedBox(
+                  width: 4.w,
+                ),
+                InkWell(
+                  onTap: () {
+                    //  PlantsCubit.get(context).changeCountCartPlus();
+                  },
+                  child: Container(
+                      width: 22.h,
+                      height: 22.h,
+                      color: Colors.grey.shade200,
+                      child: FittedBox(
+                        child: Text('+',
+                            style: TextStyle(
+                                fontSize: 22.sp,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.grey,
+                                fontFamily: 'Roboto')),
+                      )),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 6.h,
+            ),
+            FittedBox(
+              child: Text(
+                filterProducts(model.data![index]).name!,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                    fontStyle: FontStyle.normal,
+                    fontFamily: 'Roboto'),
+              ),
+            ),
+            Text(
+              '${model.data![index].price} EGP',
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                  fontStyle: FontStyle.normal,
+                  fontFamily: 'Roboto'),
+            ),
+            SizedBox(
+              height: 8.h,
+            ),
+            Container(
+              width: double.infinity,
+              height: 35.h,
+              decoration: BoxDecoration(
+                color: PrimaryGreen,
+                borderRadius: BorderRadius.circular(10.r),
+              ),
+              child: MaterialButton(
+                onPressed: () {},
+                child: Text(
+                  'Add To Cart',
+                  style: TextStyle(
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14.sp,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ) :Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.r),
@@ -114,8 +271,11 @@ class PlantsCubit extends Cubit<PlantsState> {
                 }, loadingBuilder: (context, child, loadingProgress) {
                   return loadingProgress == null
                       ? child
-                      : const Center(
-                          child: CupertinoActivityIndicator(),
+                      :  Center(
+                          child: CupertinoActivityIndicator(
+                            color: PrimaryGreen,
+
+                          ),
                         );
                 }),
               ),
@@ -249,8 +409,8 @@ class PlantsCubit extends Cubit<PlantsState> {
         return buildGridItem(toolsModel!, index, context);
       });
     }
-    return List.generate(seedsModel!.data!.length, (index) {
-      return buildGridItem(seedsModel!, index, context);
+    return List.generate(allModel!.data!.length, (index) {
+      return buildGridItem(allModel!, index, context);
     });
   }
 
@@ -274,6 +434,7 @@ class PlantsCubit extends Cubit<PlantsState> {
   bool doneTools = false;
   bool doneAll = false;
   bool doneUser = false;
+  bool doneBlogs = false;
 
   SeedsModel? seedsModel;
 
@@ -329,7 +490,7 @@ class PlantsCubit extends Cubit<PlantsState> {
     });
   }
 
-  AllModel? allModel;
+  AllProductModel? allModel;
 
   void getAll() {
     emit(AllLoadingState());
@@ -337,9 +498,9 @@ class PlantsCubit extends Cubit<PlantsState> {
       url: GET_ALL,
       token: token,
     ).then((value) {
-      allModel = AllModel.fromJson(value.data);
+      allModel = AllProductModel.fromJson(value.data);
       doneAll = true;
-      print(allModel!.data!.plants);
+      print('${allModel!.data![0].plant!.name} 9999999999999999999999999999999999999999999999999');
       emit(AllSuccessState());
     }).catchError((onError) {
       emit(AllErrorState(onError.toString()));
@@ -360,6 +521,9 @@ class PlantsCubit extends Cubit<PlantsState> {
       if (userModel!.data!.userPoints == null) {
         userModel!.data!.userPoints = '0';
       }
+      if (userModel!.data!.address == null) {
+        userModel!.data!.address = 'enter your address...';
+      }
       doneUser = true;
       emit(UserSuccessState());
     }).catchError((onError) {
@@ -367,6 +531,25 @@ class PlantsCubit extends Cubit<PlantsState> {
       print(onError.toString());
     });
   }
+
+  BlogsModel? blogsModel;
+  void getBlogs() {
+    emit(BlogsLoadingState());
+    DioHelper.getData(
+      url: GET_BLOGS,
+      token: token,
+    ).then((value) {
+      blogsModel = BlogsModel.fromJson(value.data);
+      print('@@@########### ${blogsModel!.data!.plants![0].name} ######################## ');
+      doneBlogs = true;
+      emit(BlogsSuccessState());
+    }).catchError((onError) {
+      emit(BlogsErrorState(onError.toString()));
+      print(onError.toString());
+    });
+  }
+
+
 
   UpdateUserModel? updateUserModel;
 

@@ -1,14 +1,19 @@
-class AllModel {
+class AllProductModel {
   String? type;
   String? message;
-  Data? data;
+  List<Data>? data;
 
-  AllModel({this.type, this.message, this.data});
+  AllProductModel({this.type, this.message, this.data});
 
-  AllModel.fromJson(Map<String, dynamic> json) {
+  AllProductModel.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(new Data.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -16,56 +21,97 @@ class AllModel {
     data['type'] = this.type;
     data['message'] = this.message;
     if (this.data != null) {
-      data['data'] = this.data!.toJson();
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class Data {
-  List<Plants>? plants;
-  List<Seeds>? seeds;
-  List<Tools>? tools;
+  String? productId;
+  String? name;
+  String? description;
+  String? imageUrl;
+  String? type;
+  int? price;
+  bool? available;
+  Seed? seed;
+  Plant? plant;
+  Tool? tool;
 
-  Data({this.plants, this.seeds, this.tools});
+  Data(
+      {this.productId,
+        this.name,
+        this.description,
+        this.imageUrl,
+        this.type,
+        this.price,
+        this.available,
+        this.seed,
+        this.plant,
+        this.tool});
 
   Data.fromJson(Map<String, dynamic> json) {
-    if (json['plants'] != null) {
-      plants = <Plants>[];
-      json['plants'].forEach((v) {
-        plants!.add(new Plants.fromJson(v));
-      });
-    }
-    if (json['seeds'] != null) {
-      seeds = <Seeds>[];
-      json['seeds'].forEach((v) {
-        seeds!.add(new Seeds.fromJson(v));
-      });
-    }
-    if (json['tools'] != null) {
-      tools = <Tools>[];
-      json['tools'].forEach((v) {
-        tools!.add(new Tools.fromJson(v));
-      });
-    }
+    productId = json['productId'];
+    name = json['name'];
+    description = json['description'];
+    imageUrl = json['imageUrl'];
+    type = json['type'];
+    price = json['price'];
+    available = json['available'];
+    seed = json['seed'] != null ? new Seed.fromJson(json['seed']) : null;
+    plant = json['plant'] != null ? new Plant.fromJson(json['plant']) : null;
+    tool = json['tool'] != null ? new Tool.fromJson(json['tool']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.plants != null) {
-      data['plants'] = this.plants!.map((v) => v.toJson()).toList();
+    data['productId'] = this.productId;
+    data['name'] = this.name;
+    data['description'] = this.description;
+    data['imageUrl'] = this.imageUrl;
+    data['type'] = this.type;
+    data['price'] = this.price;
+    data['available'] = this.available;
+    if (this.seed != null) {
+      data['seed'] = this.seed!.toJson();
     }
-    if (this.seeds != null) {
-      data['seeds'] = this.seeds!.map((v) => v.toJson()).toList();
+    if (this.plant != null) {
+      data['plant'] = this.plant!.toJson();
     }
-    if (this.tools != null) {
-      data['tools'] = this.tools!.map((v) => v.toJson()).toList();
+    if (this.tool != null) {
+      data['tool'] = this.tool!.toJson();
     }
     return data;
   }
 }
 
-class Plants {
+class Seed {
+  String? seedId;
+  String? name;
+  String? description;
+  String? imageUrl;
+
+  Seed({this.seedId, this.name, this.description, this.imageUrl});
+
+  Seed.fromJson(Map<String, dynamic> json) {
+    seedId = json['seedId'];
+    name = json['name'];
+    description = json['description'];
+    imageUrl = json['imageUrl'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['seedId'] = this.seedId;
+    data['name'] = this.name;
+    data['description'] = this.description;
+    data['imageUrl'] = this.imageUrl;
+    return data;
+  }
+}
+
+class Plant {
   String? plantId;
   String? name;
   String? description;
@@ -74,7 +120,7 @@ class Plants {
   int? sunLight;
   int? temperature;
 
-  Plants(
+  Plant(
       {this.plantId,
         this.name,
         this.description,
@@ -83,7 +129,7 @@ class Plants {
         this.sunLight,
         this.temperature});
 
-  Plants.fromJson(Map<String, dynamic> json) {
+  Plant.fromJson(Map<String, dynamic> json) {
     plantId = json['plantId'];
     name = json['name'];
     description = json['description'];
@@ -106,40 +152,15 @@ class Plants {
   }
 }
 
-class Seeds {
-  String? seedId;
-  String? name;
-  String? description;
-  String? imageUrl;
-
-  Seeds({this.seedId, this.name, this.description, this.imageUrl});
-
-  Seeds.fromJson(Map<String, dynamic> json) {
-    seedId = json['seedId'];
-    name = json['name'];
-    description = json['description'];
-    imageUrl = json['imageUrl'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['seedId'] = this.seedId;
-    data['name'] = this.name;
-    data['description'] = this.description;
-    data['imageUrl'] = this.imageUrl;
-    return data;
-  }
-}
-
-class Tools {
+class Tool {
   String? toolId;
   String? name;
   String? description;
   String? imageUrl;
 
-  Tools({this.toolId, this.name, this.description, this.imageUrl});
+  Tool({this.toolId, this.name, this.description, this.imageUrl});
 
-  Tools.fromJson(Map<String, dynamic> json) {
+  Tool.fromJson(Map<String, dynamic> json) {
     toolId = json['toolId'];
     name = json['name'];
     description = json['description'];
