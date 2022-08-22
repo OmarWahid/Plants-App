@@ -278,7 +278,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           color: const Color(0xFF7D7B7B),
                         )),
                     SizedBox(
-                      height: 16.h,
+                      height: 18.h,
                     ),
                     Container(
                       width: 160.w,
@@ -288,7 +288,13 @@ class _SearchScreenState extends State<SearchScreen> {
                         borderRadius: BorderRadius.circular(10.r),
                       ),
                       child: MaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                        PlantsCubit.get(context).  insertToDatabase(
+                            image: '$BASE_URL${data.imageUrl}',
+                            title: data.name!,
+                            des: '${data.price!.toString()} EGP',
+                          );
+                        },
                         child: Text(
                           'Add To Cart',
                           style: TextStyle(

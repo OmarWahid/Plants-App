@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
                 ..getPlants()
                 ..getTools()
                 ..getAll()
-                ..getUser()..getBlogs(),
+                ..getUser()..getBlogs()..createDataBase(),
             ),
             BlocProvider(
               create: (context) => LoginCubit(),
@@ -65,8 +65,8 @@ class MyApp extends StatelessWidget {
                 ),
               ),
             ),
-            home: const SplashScreen(),
-            // home: const LoginScreen(),
+            // home: const SplashScreen(),
+            home: const LoginScreen(),
           ),
         );
       },

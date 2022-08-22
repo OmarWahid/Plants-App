@@ -78,3 +78,10 @@ class BlogsErrorState extends PlantsState {
   BlogsErrorState(this.error);
 }
 class BlogsLoadingState extends PlantsState {}
+
+class createCubitDataBase extends PlantsState{ }
+class insertCubitToDatabase extends PlantsState{ }
+class updateCubitDataBase extends PlantsState{ }
+class deleteCubitDataBase extends PlantsState{ }
+class LoadingCirclarCubit extends PlantsState{ }
+class getDataCubitFromDataBase extends PlantsState{ }

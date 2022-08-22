@@ -16,6 +16,7 @@ import 'package:plants_orange/modules/notification/notification_screen.dart';
 import 'package:plants_orange/modules/profile/profile_screen.dart';
 import 'package:plants_orange/modules/scanner/scanner_screen.dart';
 import 'package:plants_orange/shared/component.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../../../network/dio_helper.dart';
 import '../../../shared/constant.dart';
@@ -90,307 +91,320 @@ class PlantsCubit extends Cubit<PlantsState> {
     emit(StateButtonProducts());
   }
 
-  dynamic filterProducts(model){
-    if(model.seed ==null && model.tool ==null){
+  dynamic filterProducts(model) {
+    if (model.seed == null && model.tool == null) {
       return model.plant;
-    }
-    else if(model.plant ==null && model.tool ==null){
+    } else if (model.plant == null && model.tool == null) {
       return model.seed;
-    }
-    else {
+    } else {
       return model.tool;
     }
   }
 
   Widget buildGridItem(model, index, context) {
-    return   (model==allModel) ? Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.r),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10.r),
-                child: Image.network(
-                    '$BASE_URL${model.data![index].imageUrl!}',
-                    fit: BoxFit.cover, width: double.infinity,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Image.asset(
-                        'assets/images/ex_plant.png',
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                      );
-                    }, loadingBuilder: (context, child, loadingProgress) {
-                      return loadingProgress == null
-                          ? child
-                          :  Center(
-                        child: CupertinoActivityIndicator(
-                          color: PrimaryGreen,
-
-                        ),
-                      );
-                    }),
-              ),
+    return (model == allModel)
+        ? Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.r),
             ),
-            SizedBox(
-              height: 6.h,
-            ),
-            Row(
-              children: [
-                const Spacer(),
-                InkWell(
-                  onTap: () {
-                    //     PlantsCubit.get(context).changeCountCartMinus();
-                  },
-                  child: Container(
-                      width: 22.h,
-                      height: 22.h,
-                      color: Colors.grey.shade200,
-                      child: FittedBox(
-                        child: Text('-',
-                            style: TextStyle(
-                                fontSize: 22.sp,
-                                fontWeight: FontWeight.w900,
-                                color: Colors.grey,
-                                fontFamily: 'Roboto')),
-                      )),
-                ),
-                SizedBox(
-                  width: 4.w,
-                ),
-                Text(
-                  '${PlantsCubit.get(context).count}',
-                  style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                      fontStyle: FontStyle.normal,
-                      fontFamily: 'Roboto'),
-                ),
-                SizedBox(
-                  width: 4.w,
-                ),
-                InkWell(
-                  onTap: () {
-                    //  PlantsCubit.get(context).changeCountCartPlus();
-                  },
-                  child: Container(
-                      width: 22.h,
-                      height: 22.h,
-                      color: Colors.grey.shade200,
-                      child: FittedBox(
-                        child: Text('+',
-                            style: TextStyle(
-                                fontSize: 22.sp,
-                                fontWeight: FontWeight.w900,
-                                color: Colors.grey,
-                                fontFamily: 'Roboto')),
-                      )),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 6.h,
-            ),
-            FittedBox(
-              child: Text(
-                filterProducts(model.data![index]).name!,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                    fontStyle: FontStyle.normal,
-                    fontFamily: 'Roboto'),
-              ),
-            ),
-            Text(
-              '${model.data![index].price} EGP',
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              style: TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black,
-                  fontStyle: FontStyle.normal,
-                  fontFamily: 'Roboto'),
-            ),
-            SizedBox(
-              height: 8.h,
-            ),
-            Container(
-              width: double.infinity,
-              height: 35.h,
-              decoration: BoxDecoration(
-                color: PrimaryGreen,
-                borderRadius: BorderRadius.circular(10.r),
-              ),
-              child: MaterialButton(
-                onPressed: () {},
-                child: Text(
-                  'Add To Cart',
-                  style: TextStyle(
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14.sp,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ) :Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.r),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10.r),
-                child: Image.network('$BASE_URL${model.data![index].imageUrl!}',
-                    fit: BoxFit.cover, width: double.infinity,
-                    errorBuilder: (context, error, stackTrace) {
-                  return Image.asset(
-                    'assets/images/ex_plant.png',
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  );
-                }, loadingBuilder: (context, child, loadingProgress) {
-                  return loadingProgress == null
-                      ? child
-                      :  Center(
-                          child: CupertinoActivityIndicator(
-                            color: PrimaryGreen,
-
-                          ),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.r),
+                      child: Image.network(
+                          '$BASE_URL${model.data![index].imageUrl!}',
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          'assets/images/ex_plant.png',
+                          fit: BoxFit.cover,
+                          width: double.infinity,
                         );
-                }),
-              ),
-            ),
-            SizedBox(
-              height: 6.h,
-            ),
-            Row(
-              children: [
-                const Spacer(),
-                InkWell(
-                  onTap: () {
-               //     PlantsCubit.get(context).changeCountCartMinus();
-                  },
-                  child: Container(
-                      width: 22.h,
-                      height: 22.h,
-                      color: Colors.grey.shade200,
-                      child: FittedBox(
-                        child: Text('-',
-                            style: TextStyle(
-                                fontSize: 22.sp,
-                                fontWeight: FontWeight.w900,
-                                color: Colors.grey,
-                                fontFamily: 'Roboto')),
-                      )),
-                ),
-                SizedBox(
-                  width: 4.w,
-                ),
-                Text(
-                  '${PlantsCubit.get(context).count}',
-                  style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                      fontStyle: FontStyle.normal,
-                      fontFamily: 'Roboto'),
-                ),
-                SizedBox(
-                  width: 4.w,
-                ),
-                InkWell(
-                  onTap: () {
-                  //  PlantsCubit.get(context).changeCountCartPlus();
-                  },
-                  child: Container(
-                      width: 22.h,
-                      height: 22.h,
-                      color: Colors.grey.shade200,
-                      child: FittedBox(
-                        child: Text('+',
-                            style: TextStyle(
-                                fontSize: 22.sp,
-                                fontWeight: FontWeight.w900,
-                                color: Colors.grey,
-                                fontFamily: 'Roboto')),
-                      )),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 6.h,
-            ),
-            FittedBox(
-              child: Text(
-                model.data![index].name!,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                    fontStyle: FontStyle.normal,
-                    fontFamily: 'Roboto'),
-              ),
-            ),
-            Text(
-              model.data![index].description!,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              style: TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black,
-                  fontStyle: FontStyle.normal,
-                  fontFamily: 'Roboto'),
-            ),
-            SizedBox(
-              height: 8.h,
-            ),
-            Container(
-              width: double.infinity,
-              height: 35.h,
-              decoration: BoxDecoration(
-                color: PrimaryGreen,
-                borderRadius: BorderRadius.circular(10.r),
-              ),
-              child: MaterialButton(
-                onPressed: () {},
-                child: Text(
-                  'Add To Cart',
-                  style: TextStyle(
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14.sp,
-                    color: Colors.white,
+                      }, loadingBuilder: (context, child, loadingProgress) {
+                        return loadingProgress == null
+                            ? child
+                            : Center(
+                                child: CupertinoActivityIndicator(
+                                  color: PrimaryGreen,
+                                ),
+                              );
+                      }),
+                    ),
                   ),
-                ),
+                  SizedBox(
+                    height: 6.h,
+                  ),
+                  Row(
+                    children: [
+                      const Spacer(),
+                      InkWell(
+                        onTap: () {
+                          //     PlantsCubit.get(context).changeCountCartMinus();
+                        },
+                        child: Container(
+                            width: 22.h,
+                            height: 22.h,
+                            color: Colors.grey.shade200,
+                            child: FittedBox(
+                              child: Text('-',
+                                  style: TextStyle(
+                                      fontSize: 22.sp,
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.grey,
+                                      fontFamily: 'Roboto')),
+                            )),
+                      ),
+                      SizedBox(
+                        width: 4.w,
+                      ),
+                      Text(
+                        '${PlantsCubit.get(context).count}',
+                        style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                            fontStyle: FontStyle.normal,
+                            fontFamily: 'Roboto'),
+                      ),
+                      SizedBox(
+                        width: 4.w,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          //  PlantsCubit.get(context).changeCountCartPlus();
+                        },
+                        child: Container(
+                            width: 22.h,
+                            height: 22.h,
+                            color: Colors.grey.shade200,
+                            child: FittedBox(
+                              child: Text('+',
+                                  style: TextStyle(
+                                      fontSize: 22.sp,
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.grey,
+                                      fontFamily: 'Roboto')),
+                            )),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 6.h,
+                  ),
+                  FittedBox(
+                    child: Text(
+                      filterProducts(model.data![index]).name!,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                          fontStyle: FontStyle.normal,
+                          fontFamily: 'Roboto'),
+                    ),
+                  ),
+                  Text(
+                    '${model.data![index].price} EGP',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        fontStyle: FontStyle.normal,
+                        fontFamily: 'Roboto'),
+                  ),
+                  SizedBox(
+                    height: 8.h,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 35.h,
+                    decoration: BoxDecoration(
+                      color: PrimaryGreen,
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                    child: MaterialButton(
+                      onPressed: () {
+                        insertToDatabase(
+                          image: '$BASE_URL${model.data![index].imageUrl!}',
+                          title: filterProducts(model.data![index]).name!,
+                          des: '${model.data![index].price} EGP',
+                        );
+                      },
+                      child: Text(
+                        'Add To Cart',
+                        style: TextStyle(
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14.sp,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          )
+        : Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.r),
+                      child: Image.network(
+                          '$BASE_URL${model.data![index].imageUrl!}',
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          'assets/images/ex_plant.png',
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        );
+                      }, loadingBuilder: (context, child, loadingProgress) {
+                        return loadingProgress == null
+                            ? child
+                            : Center(
+                                child: CupertinoActivityIndicator(
+                                  color: PrimaryGreen,
+                                ),
+                              );
+                      }),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 6.h,
+                  ),
+                  Row(
+                    children: [
+                      const Spacer(),
+                      InkWell(
+                        onTap: () {
+                          //     PlantsCubit.get(context).changeCountCartMinus();
+                        },
+                        child: Container(
+                            width: 22.h,
+                            height: 22.h,
+                            color: Colors.grey.shade200,
+                            child: FittedBox(
+                              child: Text('-',
+                                  style: TextStyle(
+                                      fontSize: 22.sp,
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.grey,
+                                      fontFamily: 'Roboto')),
+                            )),
+                      ),
+                      SizedBox(
+                        width: 4.w,
+                      ),
+                      Text(
+                        '${PlantsCubit.get(context).count}',
+                        style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                            fontStyle: FontStyle.normal,
+                            fontFamily: 'Roboto'),
+                      ),
+                      SizedBox(
+                        width: 4.w,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          //  PlantsCubit.get(context).changeCountCartPlus();
+                        },
+                        child: Container(
+                            width: 22.h,
+                            height: 22.h,
+                            color: Colors.grey.shade200,
+                            child: FittedBox(
+                              child: Text('+',
+                                  style: TextStyle(
+                                      fontSize: 22.sp,
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.grey,
+                                      fontFamily: 'Roboto')),
+                            )),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 6.h,
+                  ),
+                  FittedBox(
+                    child: Text(
+                      model.data![index].name!,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                          fontStyle: FontStyle.normal,
+                          fontFamily: 'Roboto'),
+                    ),
+                  ),
+                  Text(
+                    model.data![index].description!,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        fontStyle: FontStyle.normal,
+                        fontFamily: 'Roboto'),
+                  ),
+                  SizedBox(
+                    height: 8.h,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 35.h,
+                    decoration: BoxDecoration(
+                      color: PrimaryGreen,
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                    child: MaterialButton(
+                      onPressed: () {
+                        insertToDatabase(
+                          image: '$BASE_URL${model.data![index].imageUrl!}',
+                          title: model.data![index].name!,
+                          des: model.data![index].description!,
+                        );
+                      },
+                      child: Text(
+                        'Add To Cart',
+                        style: TextStyle(
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14.sp,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
   }
 
   List<Widget>? typeGridView(context) {
@@ -500,7 +514,8 @@ class PlantsCubit extends Cubit<PlantsState> {
     ).then((value) {
       allModel = AllProductModel.fromJson(value.data);
       doneAll = true;
-      print('${allModel!.data![0].plant!.name} 9999999999999999999999999999999999999999999999999');
+      print(
+          '${allModel!.data![0].plant!.name} 9999999999999999999999999999999999999999999999999');
       emit(AllSuccessState());
     }).catchError((onError) {
       emit(AllErrorState(onError.toString()));
@@ -533,6 +548,7 @@ class PlantsCubit extends Cubit<PlantsState> {
   }
 
   BlogsModel? blogsModel;
+
   void getBlogs() {
     emit(BlogsLoadingState());
     DioHelper.getData(
@@ -540,7 +556,8 @@ class PlantsCubit extends Cubit<PlantsState> {
       token: token,
     ).then((value) {
       blogsModel = BlogsModel.fromJson(value.data);
-      print('@@@########### ${blogsModel!.data!.plants![0].name} ######################## ');
+      print(
+          '@@@########### ${blogsModel!.data!.plants![0].name} ######################## ');
       doneBlogs = true;
       emit(BlogsSuccessState());
     }).catchError((onError) {
@@ -548,8 +565,6 @@ class PlantsCubit extends Cubit<PlantsState> {
       print(onError.toString());
     });
   }
-
-
 
   UpdateUserModel? updateUserModel;
 
@@ -618,6 +633,85 @@ class PlantsCubit extends Cubit<PlantsState> {
     }).catchError((onError) {
       emit(UserErrorState(onError.toString()));
       print(onError.toString());
+    });
+  }
+
+  late Database database;
+  late List<Map> newTasks = [];
+
+  void createDataBase() {
+    openDatabase('cart.db', version: 1, onCreate: (database, version) {
+      print('DataBase Created !');
+      database
+          .execute(
+              'CREATE TABLE carts (id INTEGER PRIMARY KEY,title TEXT,des TEXT,image TEXT,status TEXT)')
+          .then((value) {
+        print('Table Created !');
+      }).onError((error, stackTrace) {
+        print('error => ${error.toString()}');
+      });
+    }, onOpen: (database) {
+      getDataFromDataBase(database);
+      print('DataBase Opened !');
+    }).then((value) {
+      database = value;
+      emit(createCubitDataBase());
+    });
+  }
+
+  insertToDatabase({
+    required String title,
+    required String des,
+    required String image,
+  }) async {
+    await database.transaction((txn) async {
+      txn
+          .rawInsert(
+              'INSERT INTO carts (title,des,image,status) VALUES ("$title","$des","$image","new")')
+          .then((value) {
+        print('$value inserting successfully !');
+       Fluttertoast.showToast(
+          msg: 'Added to Cart Successfully ✔',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+        emit(insertCubitToDatabase());
+        getDataFromDataBase(database);
+      }).onError((error, stackTrace) {
+        print('error => ${error.toString()}');
+      });
+    });
+  }
+
+  void getDataFromDataBase(database) async {
+    newTasks = [];
+    emit(LoadingCirclarCubit());
+   await database.rawQuery('SELECT * FROM carts').then((value) {
+      value.forEach((element) {
+        if (element['status'] == 'new') {
+          newTasks.add(element);
+        }
+      });
+      emit(getDataCubitFromDataBase());
+    });
+  }
+
+  void updateDataBase({required String status, required int id}) {
+    database.rawUpdate(
+        'UPDATE carts SET status = ? WHERE id = ?', [status, id]).then((value) {
+      getDataFromDataBase(database);
+      emit(updateCubitDataBase());
+    });
+  }
+
+  void deleteDataBase({required int id})  {
+    database.rawDelete('DELETE FROM carts WHERE id = ?', [id]).then((value) {
+      getDataFromDataBase(database);
+      emit(deleteCubitDataBase());
     });
   }
 }
