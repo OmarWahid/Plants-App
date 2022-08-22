@@ -10,7 +10,6 @@ import 'package:plants_orange/models/seeds_model.dart';
 import 'package:plants_orange/models/tools_model.dart';
 import 'package:plants_orange/models/update_user_model.dart';
 import 'package:plants_orange/models/user_model.dart';
-import 'package:plants_orange/modules/care_plants/blogs_screen.dart';
 import 'package:plants_orange/modules/home_screen/home_cubit/plants_states.dart';
 import 'package:plants_orange/modules/home_screen/home_screen.dart';
 import 'package:plants_orange/modules/notification/notification_screen.dart';
@@ -21,6 +20,7 @@ import 'package:plants_orange/shared/component.dart';
 import '../../../network/dio_helper.dart';
 import '../../../shared/constant.dart';
 import '../../../style/colors.dart';
+import '../../blogs/blogs_screen.dart';
 
 class PlantsCubit extends Cubit<PlantsState> {
   PlantsCubit() : super(InitialState_());
