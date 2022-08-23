@@ -8,3 +8,4 @@ String GET_USER ='/api/v1/user/me';
 String GET_BLOGS ='/api/v1/products/blogs';
 String GET_ALL ='/api/v1/products';
 String BASE_URL = 'https://lavie.orangedigitalcenteregypt.com';
+String CREATE_POST = '/api/v1/forums';

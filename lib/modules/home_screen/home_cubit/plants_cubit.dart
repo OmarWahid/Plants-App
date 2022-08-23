@@ -566,6 +566,29 @@ class PlantsCubit extends Cubit<PlantsState> {
     });
   }
 
+  void createPost({
+  required String title,
+  required String description,
+  required String image,
+}){
+    emit(CreatePostLoadingState());
+    DioHelper.postData(
+      url: CREATE_POST,
+      token: token,
+      data: {
+        'title': title,
+        'description': description,
+        'imageBase64': image,
+      },
+    ).then((value) {
+      print(value.data);
+      emit(CreatePostSuccessState());
+    }).catchError((onError) {
+      emit(CreatePostErrorState(onError.toString()));
+      print(onError.toString());
+    });
+  }
+
   UpdateUserModel? updateUserModel;
 
   void updateUserName({

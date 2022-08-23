@@ -70,8 +70,8 @@ class PlantsLayout extends StatelessWidget {
                   ? SvgPicture.asset(
                       'assets/icons/person.svg',
                       color: Colors.white,
-                height: 30.h,
-                width: 30.h,
+                height: 27.h,
+                width: 27.h,
                     )
                   : SvgPicture.asset(
                       'assets/icons/person.svg',

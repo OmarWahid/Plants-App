@@ -88,3 +88,10 @@ class getDataCubitFromDataBase extends PlantsState{ }
 
 class pressAllForumsState extends PlantsState{ }
 class pressMeForumsState extends PlantsState{ }
+
+class CreatePostLoadingState extends PlantsState{ }
+class CreatePostSuccessState extends PlantsState{ }
+class CreatePostErrorState extends PlantsState {
+  final String error;
+  CreatePostErrorState(this.error);
+}

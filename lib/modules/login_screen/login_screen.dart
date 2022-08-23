@@ -14,6 +14,7 @@ var emailControllerLogin = TextEditingController();
 var passwordControllerLogin = TextEditingController();
 var emailControllerRegister = TextEditingController();
 var passwordControllerRegister = TextEditingController();
+var confirmPasswordControllerRegister = TextEditingController();
 var fNameController = TextEditingController();
 var lNameController = TextEditingController();
 var formController = GlobalKey<FormState>();
@@ -318,11 +319,9 @@ class LoginScreen extends StatelessWidget {
                                     if (formController.currentState!
                                         .validate()) {
                                       LoginCubit.get(context).userLogin(
-                                          email:
-                                          emailControllerLogin.text,
+                                          email: emailControllerLogin.text,
                                           password:
-                                          passwordControllerLogin
-                                              .text);
+                                              passwordControllerLogin.text);
                                     }
                                   },
                                   validator: (value) {
@@ -399,96 +398,125 @@ class LoginScreen extends StatelessWidget {
                           : Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('First Name',
-                                    style: TextStyle(
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14.sp,
-                                      color: const Color(0xFF6F6F6F),
-                                    )),
-                                SizedBox(
-                                  height: 5.h,
-                                ),
-                                TextFormField(
-                                  autofocus: false,
-                                  controller: fNameController,
-                                  cursorColor: const Color(0xFF939393),
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return "please enter your first name";
-                                    }
-                                    return null;
-                                  },
-                                  style: const TextStyle(
-                                    fontFamily: 'Roboto',
-                                  ),
-                                  decoration: InputDecoration(
-                                    isDense: true, // important line
-                                    contentPadding: EdgeInsets.fromLTRB(
-                                        10.w, 28.h, 10.w, 0.h),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5.r),
-                                      borderSide: const BorderSide(
-                                        style: BorderStyle.solid,
-                                        color: Color(0xFF939393),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text('First Name',
+                                              style: TextStyle(
+                                                fontFamily: 'Roboto',
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 14.sp,
+                                                color: const Color(0xFF6F6F6F),
+                                              )),
+                                          SizedBox(
+                                            height: 5.h,
+                                          ),
+                                          TextFormField(
+                                            autofocus: false,
+                                            controller: fNameController,
+                                            cursorColor:
+                                                const Color(0xFF939393),
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return "please enter your first name";
+                                              }
+                                              return null;
+                                            },
+                                            style: const TextStyle(
+                                              fontFamily: 'Roboto',
+                                            ),
+                                            decoration: InputDecoration(
+                                              isDense: true, // important line
+                                              contentPadding:
+                                                  EdgeInsets.fromLTRB(
+                                                      10.w, 28.h, 10.w, 0.h),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5.r),
+                                                borderSide: const BorderSide(
+                                                  style: BorderStyle.solid,
+                                                  color: Color(0xFF939393),
+                                                ),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5.r),
+                                                borderSide: const BorderSide(
+                                                  color: Color(0xFF1ABC00),
+                                                  style: BorderStyle.solid,
+                                                ),
+                                              ),
+                                            ),
+                                            keyboardType: TextInputType.name,
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5.r),
-                                      borderSide: const BorderSide(
-                                        color: Color(0xFF1ABC00),
-                                        style: BorderStyle.solid,
+                                    SizedBox(
+                                      width: 17.w,
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Last Name',
+                                              style: TextStyle(
+                                                fontFamily: 'Roboto',
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 14.sp,
+                                                color: const Color(0xFF6F6F6F),
+                                              )),
+                                          SizedBox(
+                                            height: 5.h,
+                                          ),
+                                          TextFormField(
+                                            autofocus: false,
+                                            controller: lNameController,
+                                            cursorColor:
+                                                const Color(0xFF939393),
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return "please enter your last name";
+                                              }
+                                              return null;
+                                            },
+                                            style: const TextStyle(
+                                              fontFamily: 'Roboto',
+                                            ),
+                                            decoration: InputDecoration(
+                                              isDense: true, // important line
+                                              contentPadding:
+                                                  EdgeInsets.fromLTRB(
+                                                      10.w, 28.h, 10.w, 0.h),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5.r),
+                                                borderSide: const BorderSide(
+                                                  style: BorderStyle.solid,
+                                                  color: Color(0xFF939393),
+                                                ),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5.r),
+                                                borderSide: const BorderSide(
+                                                  color: Color(0xFF1ABC00),
+                                                  style: BorderStyle.solid,
+                                                ),
+                                              ),
+                                            ),
+                                            keyboardType:
+                                                TextInputType.emailAddress,
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ),
-                                  keyboardType: TextInputType.name,
-                                ),
-                                SizedBox(
-                                  height: 19.h,
-                                ),
-                                Text('Second Name',
-                                    style: TextStyle(
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14.sp,
-                                      color: const Color(0xFF6F6F6F),
-                                    )),
-                                SizedBox(
-                                  height: 5.h,
-                                ),
-                                TextFormField(
-                                  autofocus: false,
-                                  controller: lNameController,
-                                  cursorColor: const Color(0xFF939393),
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return "please enter your second name";
-                                    }
-                                    return null;
-                                  },
-                                  style: const TextStyle(
-                                    fontFamily: 'Roboto',
-                                  ),
-                                  decoration: InputDecoration(
-                                    isDense: true, // important line
-                                    contentPadding: EdgeInsets.fromLTRB(
-                                        10.w, 28.h, 10.w, 0.h),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5.r),
-                                      borderSide: const BorderSide(
-                                        style: BorderStyle.solid,
-                                        color: Color(0xFF939393),
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5.r),
-                                      borderSide: const BorderSide(
-                                        color: Color(0xFF1ABC00),
-                                        style: BorderStyle.solid,
-                                      ),
-                                    ),
-                                  ),
-                                  keyboardType: TextInputType.emailAddress,
+                                  ],
                                 ),
                                 SizedBox(
                                   height: 19.h,
@@ -583,7 +611,70 @@ class LoginScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  keyboardType: TextInputType.emailAddress,
+                                  keyboardType: TextInputType.text,
+                                ),
+                                SizedBox(
+                                  height: 19.h,
+                                ),
+                                Text('Confirm password',
+                                    style: TextStyle(
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14.sp,
+                                      color: const Color(0xFF6F6F6F),
+                                    )),
+                                SizedBox(
+                                  height: 5.h,
+                                ),
+                                TextFormField(
+                                  autofocus: false,
+                                  obscureText: true,
+                                  onFieldSubmitted: (value) {
+                                    if (formController.currentState!
+                                        .validate()) {
+                                      LoginCubit.get(context).userRegister(
+                                          fName: fNameController.text,
+                                          lName: lNameController.text,
+                                          email: emailControllerRegister.text,
+                                          password:
+                                              passwordControllerRegister.text);
+                                    }
+                                  },
+                                  controller: confirmPasswordControllerRegister,
+                                  cursorColor: const Color(0xFF939393),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "please enter your confirm password";
+                                    }
+                                    if (value !=
+                                        passwordControllerRegister.text) {
+                                      return "password not match";
+                                    }
+                                    return null;
+                                  },
+                                  style: const TextStyle(
+                                    fontFamily: 'Roboto',
+                                  ),
+                                  decoration: InputDecoration(
+                                    isDense: true, // important line
+                                    contentPadding: EdgeInsets.fromLTRB(
+                                        10.w, 28.h, 10.w, 0.h),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(5.r),
+                                      borderSide: const BorderSide(
+                                        style: BorderStyle.solid,
+                                        color: Color(0xFF939393),
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(5.r),
+                                      borderSide: const BorderSide(
+                                        color: Color(0xFF1ABC00),
+                                        style: BorderStyle.solid,
+                                      ),
+                                    ),
+                                  ),
+                                  keyboardType: TextInputType.text,
                                 ),
                                 SizedBox(
                                   height: 37.h,
@@ -703,7 +794,7 @@ class LoginScreen extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: Container(
-                      height: 112.h,
+                      height: 106.h,
                       width: 190.w,
                       decoration: const BoxDecoration(
                         image: DecorationImage(
