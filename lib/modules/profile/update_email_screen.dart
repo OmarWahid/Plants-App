@@ -32,7 +32,9 @@ class UpdateEmailScreen extends StatelessWidget {
                 color: Colors.black,
               ),
             ),
-            backgroundColor: PrimaryGreen,
+            backgroundColor: Colors.white,
+            elevation: 0,
+
           ),
           body: Center(
             child: Padding(

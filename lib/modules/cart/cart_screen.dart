@@ -20,7 +20,7 @@ class CartScreen extends StatelessWidget {
       builder: (context, state) {
         var carts = PlantsCubit.get(context).newTasks;
 
-        if (state is! getDataCubitFromDataBase) {
+        if (state is LoadingCirclarCubit) {
           return Scaffold(
               appBar: AppBar(
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -41,6 +41,7 @@ class CartScreen extends StatelessWidget {
                 ),
               ));
         }
+
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,

@@ -670,8 +670,8 @@ class PlantsCubit extends Cubit<PlantsState> {
               'INSERT INTO carts (title,des,image,status) VALUES ("$title","$des","$image","new")')
           .then((value) {
         print('$value inserting successfully !');
-       Fluttertoast.showToast(
-          msg: 'Added to Cart Successfully ✔',
+        Fluttertoast.showToast(
+          msg: 'Added Successfully ✔',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 5,
@@ -687,10 +687,10 @@ class PlantsCubit extends Cubit<PlantsState> {
     });
   }
 
-  void getDataFromDataBase(database) async {
+  Future<void> getDataFromDataBase(database) async {
     newTasks = [];
     emit(LoadingCirclarCubit());
-   await database.rawQuery('SELECT * FROM carts').then((value) {
+    await database.rawQuery('SELECT * FROM carts').then((value) {
       value.forEach((element) {
         if (element['status'] == 'new') {
           newTasks.add(element);
@@ -707,11 +707,22 @@ class PlantsCubit extends Cubit<PlantsState> {
       emit(updateCubitDataBase());
     });
   }
-
-  void deleteDataBase({required int id})  {
-    database.rawDelete('DELETE FROM carts WHERE id = ?', [id]).then((value) {
-      getDataFromDataBase(database);
+  void deleteDataBase({required int id}) {
+    database.rawDelete('DELETE FROM carts WHERE id = ?', [id]).then((value) async{
+    await  getDataFromDataBase(database);
       emit(deleteCubitDataBase());
     });
+  }
+
+  bool isAllForums = true;
+
+  void pressAllForums() {
+    isAllForums = true;
+    emit(pressAllForumsState());
+  }
+
+  void pressMeForums() {
+    isAllForums = false;
+    emit(pressMeForumsState());
   }
 }

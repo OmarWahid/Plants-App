@@ -85,3 +85,6 @@ class updateCubitDataBase extends PlantsState{ }
 class deleteCubitDataBase extends PlantsState{ }
 class LoadingCirclarCubit extends PlantsState{ }
 class getDataCubitFromDataBase extends PlantsState{ }
+
+class pressAllForumsState extends PlantsState{ }
+class pressMeForumsState extends PlantsState{ }

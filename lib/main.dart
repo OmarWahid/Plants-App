@@ -9,11 +9,16 @@ import 'package:plants_orange/modules/login_screen/login_screen.dart';
 import 'package:plants_orange/modules/splash_screen/splash_screen.dart';
 import 'package:plants_orange/shared/bloc_observer.dart';
 import 'package:plants_orange/shared/component.dart';
+import 'modules/posts/new_posts_screen.dart';
+import 'modules/posts/posts.dart';
 import 'network/cache_helper.dart';
 import 'network/dio_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
   await CacheHelper.init();
   DioHelper.init();
   token = CacheHelper.getData(key: 'token');
@@ -65,8 +70,8 @@ class MyApp extends StatelessWidget {
                 ),
               ),
             ),
-            // home: const SplashScreen(),
-            home: const LoginScreen(),
+            home: const SplashScreen(),
+            // home: const LoginScreen(),
           ),
         );
       },

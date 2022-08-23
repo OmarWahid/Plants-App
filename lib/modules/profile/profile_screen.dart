@@ -9,6 +9,8 @@ import 'package:plants_orange/modules/home_screen/home_cubit/plants_states.dart'
 import 'package:plants_orange/modules/profile/update_email_screen.dart';
 import 'package:plants_orange/modules/profile/update_name_screen.dart';
 
+import '../posts/posts.dart';
+
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
@@ -28,7 +30,7 @@ class ProfileScreen extends StatelessWidget {
             Column(
               children: [
                 Container(
-                  height: height * 0.38,
+                  height: height * 0.40,
                   width: double.maxFinite,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
@@ -88,7 +90,7 @@ class ProfileScreen extends StatelessWidget {
               ],
             ),
             Container(
-              height: height * 0.65,
+              height: height * 0.67,
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -254,6 +256,63 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: 28.h,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const PostsScreen()));
+                      },
+                      child: Container(
+                        height: 85.h,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5.0),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 4.0,
+                                  spreadRadius: 1.0)
+                            ]),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 15.w,
+                            ),
+                            CircleAvatar(
+                              backgroundColor: Colors.white,
+                              child: SvgPicture.asset(
+                                  'assets/icons/iconChangeName.svg'),
+                            ),
+                            SizedBox(
+                              width: 14.w,
+                            ),
+                            Text('Posts',
+                                style: TextStyle(
+                                  fontSize: 18.sp,
+                                  fontStyle: FontStyle.normal,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                  fontFamily: 'Roboto',
+                                )),
+                            const Spacer(),
+                            Padding(
+                              padding: EdgeInsets.only(right: 12.w),
+                              child: const Icon(
+                                Icons.arrow_forward_sharp,
+                                color: Color(0xff1D592C),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+
                   ],
                 ),
               ),

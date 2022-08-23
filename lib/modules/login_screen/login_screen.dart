@@ -369,7 +369,7 @@ class LoginScreen extends StatelessWidget {
                                         decoration: BoxDecoration(
                                           color: PrimaryGreen,
                                           borderRadius:
-                                              BorderRadius.circular(5),
+                                              BorderRadius.circular(5.r),
                                         ),
                                         child: MaterialButton(
                                           onPressed: () {
