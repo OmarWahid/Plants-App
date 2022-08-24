@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  (token != null) ? const PlantsLayout() : const LoginScreen()),
+                  (accessToken != null) ? const PlantsLayout() : const LoginScreen()),
           (route) => false);
     });
   }

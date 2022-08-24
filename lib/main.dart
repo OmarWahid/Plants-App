@@ -1,16 +1,14 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:plants_orange/modules/home_screen/home_cubit/plants_cubit.dart';
 import 'package:plants_orange/modules/login_screen/login_cubit/login_cubit.dart';
-import 'package:plants_orange/modules/login_screen/login_screen.dart';
 import 'package:plants_orange/modules/splash_screen/splash_screen.dart';
 import 'package:plants_orange/shared/bloc_observer.dart';
 import 'package:plants_orange/shared/component.dart';
-import 'modules/posts/new_posts_screen.dart';
-import 'modules/posts/posts.dart';
 import 'network/cache_helper.dart';
 import 'network/dio_helper.dart';
 
@@ -18,13 +16,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-
+  await Firebase.initializeApp();
   await CacheHelper.init();
   DioHelper.init();
-  token = CacheHelper.getData(key: 'token');
+  accessToken = CacheHelper.getData(key: 'token');
+  refreshToken = CacheHelper.getData(key: "refreshToken");
   isTimerWorking = CacheHelper.getData(key: 'isTimerWorking') ?? false;
   // isTimerWorking = false ;
-  print(token);
+  print(accessToken);
   Bloc.observer = MyBlocObserver();
   runApp(const MyApp());
 }
@@ -75,7 +74,6 @@ class MyApp extends StatelessWidget {
               ),
             ),
             home: const SplashScreen(),
-            // home: const LoginScreen(),
           ),
         );
       },

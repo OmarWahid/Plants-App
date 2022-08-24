@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,6 +19,7 @@ var confirmPasswordControllerRegister = TextEditingController();
 var fNameController = TextEditingController();
 var lNameController = TextEditingController();
 var formController = GlobalKey<FormState>();
+bool isLoading = false;
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -31,7 +33,59 @@ class LoginScreen extends StatelessWidget {
             CacheHelper.saveData(
                     key: 'token', value: state.loginModel.data!.accessToken)
                 .then((value) {
-              token = state.loginModel.data!.accessToken;
+              accessToken = state.loginModel.data!.accessToken;
+              CacheHelper.saveData(
+                      key: "refreshToken",
+                      value: state.loginModel.data!.refreshToken)
+                  .then((value) {
+                refreshToken = state.loginModel.data!.refreshToken!;
+              });
+              Fluttertoast.showToast(
+                  msg: 'Welcome To La Vie 🤍',
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.green,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PlantsLayout(),
+                  ),
+                  (route) => false);
+            });
+          } else {
+            Fluttertoast.showToast(
+                msg: state.loginModel.message!,
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 5,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 16.0);
+          }
+        }
+        if (state is SuccessSignInGoogle) {
+          if (state.loginModel.type == 'Success') {
+            CacheHelper.saveData(
+                    key: 'token', value: state.loginModel.data!.accessToken)
+                .then((value) {
+              accessToken = state.loginModel.data!.accessToken;
+              CacheHelper.saveData(
+                      key: "refreshToken",
+                      value: state.loginModel.data!.refreshToken)
+                  .then((value) {
+                refreshToken = state.loginModel.data!.refreshToken!;
+              });
+              Fluttertoast.showToast(
+                  msg: 'Welcome To La Vie 🤍',
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.green,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
@@ -52,7 +106,7 @@ class LoginScreen extends StatelessWidget {
         }
         if (state is LoginErrorState) {
           Fluttertoast.showToast(
-              msg: 'Please Verify The Information Entered',
+              msg: state.error,
               toastLength: Toast.LENGTH_LONG,
               gravity: ToastGravity.BOTTOM,
               timeInSecForIosWeb: 5,
@@ -65,7 +119,22 @@ class LoginScreen extends StatelessWidget {
             CacheHelper.saveData(
                     key: 'token', value: state.model.data!.accessToken)
                 .then((value) {
-              token = state.model.data!.accessToken;
+              accessToken = state.model.data!.accessToken;
+              CacheHelper.saveData(
+                      key: "refreshToken",
+                      value: state.model.data!.refreshToken)
+                  .then((value) {
+                refreshToken = state.model.data!.refreshToken!;
+              });
+              Fluttertoast.showToast(
+                  msg: 'Welcome To La Vie 🤍',
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.green,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
+
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
@@ -86,7 +155,7 @@ class LoginScreen extends StatelessWidget {
         }
         if (state is RegisterErrorState) {
           Fluttertoast.showToast(
-              msg: 'Please Verify The Information Entered',
+              msg: 'There is already an account',
               toastLength: Toast.LENGTH_LONG,
               gravity: ToastGravity.BOTTOM,
               timeInSecForIosWeb: 5,
@@ -772,8 +841,22 @@ class LoginScreen extends StatelessWidget {
                             color: Colors.white,
                             child: Image.asset('assets/images/Group 4.png'),
                           ),
-                          onTap: () {
-                            LoginCubit.get(context).signIn();
+                          onTap: () async {
+                            try {
+                              LoginCubit.get(context).signInWithGoogle();
+                            } catch (e) {
+                              if (e is FirebaseAuthException) {
+                                Fluttertoast.showToast(
+                                  msg: e.message!,
+                                  toastLength: Toast.LENGTH_LONG,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 5,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0,
+                                );
+                              }
+                            }
                           },
                         ),
                         SizedBox(
@@ -786,7 +869,17 @@ class LoginScreen extends StatelessWidget {
                             color: Colors.white,
                             child: Image.asset('assets/images/Facebook.png'),
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            Fluttertoast.showToast(
+                              msg: 'وربنا سيرفرات الفيس كانت واقعة امبارح 😂',
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 5,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0,
+                            );
+                          },
                         ),
                       ],
                     ),

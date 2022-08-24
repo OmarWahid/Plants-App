@@ -4,11 +4,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:plants_orange/modules/home_screen/home_cubit/plants_cubit.dart';
-import 'package:plants_orange/shared/constant.dart';
 
 import '../style/colors.dart';
 
-String? token = '';
+String? accessToken = '';
+String? refreshToken = '';
 
 bool? isTimerWorking = false;
 
@@ -91,35 +91,39 @@ Widget buildCartsItem(model, context) {
                       decoration: BoxDecoration(
                         color: const Color(0xFFF8F8F8),
                         borderRadius: BorderRadius.circular(10.r),
-
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           InkWell(
-                            onTap: () {
-
-                            },
-                            child: Text('-', style: TextStyle(
-                              fontSize: 22.sp,
-                              fontWeight: FontWeight.w600,
-                              color: PrimaryGreen,
-                            ),),
+                            onTap: () {},
+                            child: Text(
+                              '-',
+                              style: TextStyle(
+                                fontSize: 22.sp,
+                                fontWeight: FontWeight.w600,
+                                color: PrimaryGreen,
+                              ),
+                            ),
                           ),
-                          Text('1', style: TextStyle(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF000000),
-                          ),),
-                          InkWell(
-                            onTap: () {
-
-                            },
-                            child: Text('+', style: TextStyle(
-                              fontSize: 16.sp,
+                          Text(
+                            '1',
+                            style: TextStyle(
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w600,
-                              color: PrimaryGreen,
-                            ),),
+                              color: const Color(0xFF000000),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {},
+                            child: Text(
+                              '+',
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
+                                color: PrimaryGreen,
+                              ),
+                            ),
                           )
                         ],
                       ),
@@ -127,7 +131,8 @@ Widget buildCartsItem(model, context) {
                     const Spacer(),
                     InkWell(
                       onTap: () {
-                        PlantsCubit.get(context).deleteDataBase(id: model['id']);
+                        PlantsCubit.get(context)
+                            .deleteDataBase(id: model['id']);
                       },
                       child: SvgPicture.asset('assets/icons/delete.svg',
                           height: 24.h, width: 20.w),

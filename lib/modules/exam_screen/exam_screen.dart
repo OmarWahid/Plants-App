@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:plants_orange/modules/home_screen/home_cubit/plants_cubit.dart';
 import 'package:plants_orange/modules/home_screen/home_cubit/plants_states.dart';
 import 'package:plants_orange/network/cache_helper.dart';
@@ -118,10 +119,7 @@ class _ExamScreenState extends State<ExamScreen> {
 
   Widget itemPageView(ExamModel data) {
     return BlocConsumer<PlantsCubit, PlantsState>(
-      listener: (context, state) {
-
-
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         var cubit = PlantsCubit.get(context);
 
@@ -691,7 +689,14 @@ class _ExamScreenState extends State<ExamScreen> {
                             cubit.getUser();
                           });
                         });
-
+                        Fluttertoast.showToast(
+                            msg: 'Well done see you next week 🤍',
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 5,
+                            backgroundColor: Colors.green,
+                            textColor: Colors.white,
+                            fontSize: 16.0.sp);
                         Navigator.pop(context, 'refresh');
                       },
                       child: Text(

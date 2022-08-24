@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:plants_orange/modules/home_screen/home_cubit/plants_cubit.dart';
 import 'package:plants_orange/modules/home_screen/home_cubit/plants_states.dart';
 import '../../shared/constant.dart';
@@ -342,16 +343,12 @@ class _SearchForumsScreenState extends State<SearchForumsScreen> {
                         padding: EdgeInsets.symmetric(vertical: 5.h),
                         child: Row(
                           children: [
-                            const Icon(
-                              Icons.favorite_border,
-                              size: 16,
-                              color: Colors.red,
-                            ),
+                            SvgPicture.asset('assets/icons/like.svg'),
                             SizedBox(
                               width: 5.w,
                             ),
                             Text(
-                              '${data.forumLikes!.length}',
+                              '${data.forumLikes!.length} Likes',
                               style: Theme.of(context).textTheme.caption,
                             ),
                           ],
@@ -367,17 +364,17 @@ class _SearchForumsScreenState extends State<SearchForumsScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(
-                              '${data.forumComments!.length}',
-                              style: Theme.of(context).textTheme.caption,
+                            Icon(
+                              Icons.comment_outlined,
+                              size: 18.w,
+                              color: Colors.grey.shade500,
                             ),
                             const SizedBox(
                               width: 5,
                             ),
-                            const Icon(
-                              Icons.comment_outlined,
-                              size: 16,
-                              color: Colors.amber,
+                            Text(
+                              '${data.forumComments!.length} Replies',
+                              style: Theme.of(context).textTheme.caption,
                             ),
                           ],
                         ),
@@ -427,11 +424,7 @@ class _SearchForumsScreenState extends State<SearchForumsScreen> {
                 InkWell(
                   child: Row(
                     children: [
-                      const Icon(
-                        Icons.favorite_border,
-                        size: 16,
-                        color: Colors.red,
-                      ),
+                      SvgPicture.asset('assets/icons/like.svg'),
                       const SizedBox(
                         width: 5,
                       ),
@@ -441,7 +434,11 @@ class _SearchForumsScreenState extends State<SearchForumsScreen> {
                       ),
                     ],
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    PlantsCubit.get(context).addLike(
+                        id: data
+                            .forumId!);
+                  },
                 ),
               ],
             )

@@ -45,3 +45,14 @@ class RegisterErrorState extends LoginState {
 
   RegisterErrorState(this.error);
 }
+
+
+class LoadingSignInGoogle extends LoginState {}
+class SuccessSignInGoogle extends LoginState {
+  final LoginModel loginModel;
+  SuccessSignInGoogle(this.loginModel);
+}
+class ErrorSignInGoogle extends LoginState {
+  final String error;
+  ErrorSignInGoogle({required this.error});
+}

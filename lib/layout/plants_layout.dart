@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:plants_orange/modules/home_screen/home_cubit/plants_states.dart';
-
 import '../modules/home_screen/home_cubit/plants_cubit.dart';
 import '../style/colors.dart';
 
@@ -22,6 +21,19 @@ class PlantsLayout extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           extendBody: true,
+          // floatingActionButton: BlocConsumer<LoginCubit, LoginState>(
+          //   listener: (context, state) {
+          //     // TODO: implement listener
+          //   },
+          //   builder: (context, state) {
+          //     return FloatingActionButton(
+          //       onPressed: () async {
+          //         LoginCubit.get(context).signOutFromGoogle(context);
+          //       },
+          //       child: const Icon(Icons.add),
+          //     );
+          //   },
+          // ),
           extendBodyBehindAppBar: true,
           body: cubit.screens[cubit.currentIndex],
           bottomNavigationBar: CurvedNavigationBar(
@@ -30,8 +42,8 @@ class PlantsLayout extends StatelessWidget {
                   ? SvgPicture.asset(
                       'assets/icons/leave .svg',
                       color: Colors.white,
-                height: 30.h,
-                width: 30.h,
+                      height: 30.h,
+                      width: 30.h,
                     )
                   : SvgPicture.asset(
                       'assets/icons/leave .svg',
@@ -40,7 +52,6 @@ class PlantsLayout extends StatelessWidget {
                   ? SvgPicture.asset(
                       'assets/icons/qr-code.svg',
                       color: Colors.white,
-
                     )
                   : SvgPicture.asset(
                       'assets/icons/qr-code.svg',
@@ -49,8 +60,8 @@ class PlantsLayout extends StatelessWidget {
                   ? SvgPicture.asset(
                       'assets/icons/Home.svg',
                       color: Colors.white,
-                height: 30.h,
-                width: 30.h,
+                      height: 30.h,
+                      width: 30.h,
                     )
                   : SvgPicture.asset(
                       'assets/icons/Home.svg',
@@ -60,8 +71,8 @@ class PlantsLayout extends StatelessWidget {
                   ? SvgPicture.asset(
                       'assets/icons/all_notification.svg',
                       color: Colors.white,
-                height: 30.h,
-                width: 30.h,
+                      height: 30.h,
+                      width: 30.h,
                     )
                   : SvgPicture.asset(
                       'assets/icons/all_notification.svg',
@@ -70,8 +81,8 @@ class PlantsLayout extends StatelessWidget {
                   ? SvgPicture.asset(
                       'assets/icons/person.svg',
                       color: Colors.white,
-                height: 27.h,
-                width: 27.h,
+                      height: 27.h,
+                      width: 27.h,
                     )
                   : SvgPicture.asset(
                       'assets/icons/person.svg',

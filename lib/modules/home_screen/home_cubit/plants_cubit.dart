@@ -115,27 +115,30 @@ class PlantsCubit extends Cubit<PlantsState> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.r),
-                      child: Image.network(
-                          '$BASE_URL${model.data![index].imageUrl!}',
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          errorBuilder: (context, error, stackTrace) {
-                        return Image.asset(
-                          'assets/images/ex_plant.png',
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                        );
-                      }, loadingBuilder: (context, child, loadingProgress) {
-                        return loadingProgress == null
-                            ? child
-                            : Center(
-                                child: CupertinoActivityIndicator(
-                                  color: PrimaryGreen,
-                                ),
-                              );
-                      }),
+                    child: InkWell(
+                      onTap: (){},
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.r),
+                        child: Image.network(
+                            '$BASE_URL${model.data![index].imageUrl!}',
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            'assets/images/ex_plant.png',
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          );
+                        }, loadingBuilder: (context, child, loadingProgress) {
+                          return loadingProgress == null
+                              ? child
+                              : Center(
+                                  child: CupertinoActivityIndicator(
+                                    color: PrimaryGreen,
+                                  ),
+                                );
+                        }),
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -178,7 +181,11 @@ class PlantsCubit extends Cubit<PlantsState> {
                       ),
                       InkWell(
                         onTap: () {
-                          //  PlantsCubit.get(context).changeCountCartPlus();
+                          insertToDatabase(
+                            image: '$BASE_URL${model.data![index].imageUrl!}',
+                            title: filterProducts(model.data![index]).name!,
+                            des: '${model.data![index].price} EGP',
+                          );
                         },
                         child: Container(
                             width: 22.h,
@@ -459,11 +466,10 @@ class PlantsCubit extends Cubit<PlantsState> {
     emit(SeedsLoadingState());
     DioHelper.getData(
       url: GET_SEEDS,
-      token: token,
+      token: accessToken,
     ).then((value) {
       seedsModel = SeedsModel.fromJson(value.data);
       doneSeeds = true;
-      print(seedsModel!.data![0].name);
       emit(SeedsSuccessState());
     }).catchError((onError) {
       emit(SeedsErrorState(onError.toString()));
@@ -477,11 +483,10 @@ class PlantsCubit extends Cubit<PlantsState> {
     emit(PlantsLoadingState());
     DioHelper.getData(
       url: GET_PLANTS,
-      token: token,
+      token: accessToken,
     ).then((value) {
       plantsModel = PlantsModel.fromJson(value.data);
       donePlants = true;
-      print(plantsModel!.data![0].name);
       emit(PlantsSuccessState());
     }).catchError((onError) {
       emit(PlantsErrorState(onError.toString()));
@@ -495,11 +500,10 @@ class PlantsCubit extends Cubit<PlantsState> {
     emit(ToolsLoadingState());
     DioHelper.getData(
       url: GET_TOOLS,
-      token: token,
+      token: accessToken,
     ).then((value) {
       toolsModel = ToolsModel.fromJson(value.data);
       doneTools = true;
-      print(toolsModel!.data![0].name);
       emit(ToolsSuccessState());
     }).catchError((onError) {
       emit(ToolsErrorState(onError.toString()));
@@ -513,12 +517,10 @@ class PlantsCubit extends Cubit<PlantsState> {
     emit(AllLoadingState());
     DioHelper.getData(
       url: GET_ALL,
-      token: token,
+      token: accessToken,
     ).then((value) {
       allModel = AllProductModel.fromJson(value.data);
       doneAll = true;
-      print(
-          '${allModel!.data![0].plant!.name} 9999999999999999999999999999999999999999999999999');
       emit(AllSuccessState());
     }).catchError((onError) {
       emit(AllErrorState(onError.toString()));
@@ -532,10 +534,9 @@ class PlantsCubit extends Cubit<PlantsState> {
     emit(UserLoadingState());
     DioHelper.getData(
       url: GET_USER,
-      token: token,
+      token: accessToken,
     ).then((value) {
       userModel = UserModel.fromJson(value.data);
-      print(userModel!.data!.firstName);
       if (userModel!.data!.userPoints == null) {
         userModel!.data!.userPoints = '0';
       }
@@ -556,11 +557,9 @@ class PlantsCubit extends Cubit<PlantsState> {
     emit(BlogsLoadingState());
     DioHelper.getData(
       url: GET_BLOGS,
-      token: token,
+      token: accessToken,
     ).then((value) {
       blogsModel = BlogsModel.fromJson(value.data);
-      print(
-          '@@@########### ${blogsModel!.data!.plants![0].name} ######################## ');
       doneBlogs = true;
       emit(BlogsSuccessState());
     }).catchError((onError) {
@@ -577,14 +576,13 @@ class PlantsCubit extends Cubit<PlantsState> {
     emit(CreatePostLoadingState());
     DioHelper.postData(
       url: CREATE_POST,
-      token: token,
+      token: accessToken,
       data: {
         'title': title,
         'description': description,
         'imageBase64': image,
       },
     ).then((value) {
-      print(value.data);
       Fluttertoast.showToast(
         msg: 'Post Created Successfully ✔',
         toastLength: Toast.LENGTH_SHORT,
@@ -603,15 +601,13 @@ class PlantsCubit extends Cubit<PlantsState> {
 
   ForumsModel? forumsModel;
 
-  void getForums() {
+  Future<void> getForums() async {
     emit(ForumsLoadingState());
-    DioHelper.getData(
+    await DioHelper.getData(
       url: GET_FORUMS,
-      token: token,
+      token: accessToken,
     ).then((value) {
       forumsModel = ForumsModel.fromJson(value.data);
-      print(
-          '@@@########### ${forumsModel!.data![0].user!.firstName} ######################## ');
       doneForums = true;
       emit(ForumsSuccessState());
     }).catchError((onError) {
@@ -626,11 +622,14 @@ class PlantsCubit extends Cubit<PlantsState> {
     emit(MyForumsLoadingState());
     DioHelper.getData(
       url: GET_MY_FORUMS,
-      token: token,
+      token: accessToken,
     ).then((value) {
+
       myForumsModel = ForumsModel.fromJson(value.data);
-      print(
-          '@@@########### ${myForumsModel!.data![0].user!.firstName} ######################## ');
+      if (myForumsModel!.data == null) {
+        myForumsModel!.data = [];
+       }
+
       doneMyForums = true;
       emit(MyForumsSuccessState());
     }).catchError((onError) {
@@ -648,7 +647,7 @@ class PlantsCubit extends Cubit<PlantsState> {
     emit(UserLoadingState());
     DioHelper.patchData(
       url: GET_USER,
-      token: token,
+      token: accessToken,
       data: {
         "firstName": firstName,
         "lastName": lastName,
@@ -657,7 +656,6 @@ class PlantsCubit extends Cubit<PlantsState> {
       },
     ).then((value) {
       updateUserModel = UpdateUserModel.fromJson(value.data);
-      print(updateUserModel!.data!.firstName);
       Fluttertoast.showToast(
         msg: 'Updated Successfully ✔',
         toastLength: Toast.LENGTH_LONG,
@@ -682,7 +680,7 @@ class PlantsCubit extends Cubit<PlantsState> {
     emit(UserLoadingState());
     DioHelper.patchData(
       url: GET_USER,
-      token: token,
+      token: accessToken,
       data: {
         "firstName": userModel!.data!.firstName,
         "lastName": userModel!.data!.lastName,
@@ -803,43 +801,41 @@ class PlantsCubit extends Cubit<PlantsState> {
 
     emit(pressMeForumsState());
   }
-
+bool isLiked = false;
   void addLike({required String id}) {
     emit(LikesLoadingState());
     DioHelper.postData(
-      url: ADD_LIKES,
-      token: token,
-      data: {
-        "forumId": id,
-      },
-      query: {
-        "forumId": id,
-      },
-
-    ).then((value) {
-      getForums();
+      url: '/api/v1/forums/$id/like',
+      token: accessToken,
+    ).then((value) async {
+      isLiked = true;
+      await getForums();
       emit(LikesSuccessState());
+      isLiked = false;
     }).catchError((onError) {
       emit(LikesErrorState(onError.toString()));
       print(onError.toString());
     });
   }
 
+  bool isComment = false;
+
   void addComment({
     required String id,
     required String comment,
   }) {
+    isComment = true;
     emit(CommentLoadingState());
     DioHelper.postData(
-      url: ADD_COMMENT,
-      token: token,
+      url: '/api/v1/forums/$id/comment',
+      token: accessToken,
       data: {
-        "forumId": id,
         "comment": comment,
       },
-    ).then((value) {
-      getForums();
+    ).then((value) async {
+      await getForums();
       emit(CommentSuccessState());
+      isComment = false;
     }).catchError((onError) {
       emit(CommentErrorState(onError.toString()));
       print(onError.toString());

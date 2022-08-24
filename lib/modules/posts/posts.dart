@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:plants_orange/modules/home_screen/home_cubit/plants_cubit.dart';
 import 'package:plants_orange/modules/home_screen/home_cubit/plants_states.dart';
 import 'package:plants_orange/modules/posts/search_forums_screen.dart';
 
 import '../../shared/constant.dart';
 import '../../style/colors.dart';
+import 'comments_screen.dart';
 import 'new_posts_screen.dart';
 
 class PostsScreen extends StatelessWidget {
@@ -17,7 +19,19 @@ class PostsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<PlantsCubit, PlantsState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (PlantsCubit.get(context).isLiked) {
+          Fluttertoast.showToast(
+            msg: 'Liked 👍🏼',
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 5,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.sp,
+          );
+        }
+      },
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
@@ -203,9 +217,46 @@ class PostsScreen extends StatelessWidget {
                   ListView.separated(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) =>
-                          (PlantsCubit.get(context).isAllForums)
-                              ? buildPostItem(context, index)
+                      itemBuilder: (context, index) => (PlantsCubit.get(context)
+                              .isAllForums)
+                          ? buildPostItem(context, index)
+                          : (PlantsCubit.get(context).myForumsModel!.data == [])
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      height: 100.h,
+                                    ),
+                                    Image.asset('assets/images/NotFound.png'),
+                                    SizedBox(
+                                      height: 40.h,
+                                    ),
+                                     Text('Your forums will appear here',
+                                        style: TextStyle(
+                                          fontSize: 20.sp,
+                                          fontFamily: 'Roboto',
+                                          fontStyle: FontStyle.normal,
+                                          fontWeight: FontWeight.w700,
+                                          color: const Color(0xff212121),
+                                        )),
+                                    SizedBox(
+                                      height: 12.h,
+                                    ),
+                                    Text(
+                                        textAlign: TextAlign.center,
+                                        'You can create your own forum by clicking on the button below',
+                                        style: TextStyle(
+                                          fontSize: 14.sp,
+                                          fontFamily: 'Roboto',
+                                          fontStyle: FontStyle.normal,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey,
+                                        )),
+                                    SizedBox(
+                                      height: 160.h,
+                                    ),
+                                  ],
+                                )
                               : buildMyPostItem(context, index),
                       separatorBuilder: (context, index) =>
                           SizedBox(height: 15.h),
@@ -431,7 +482,23 @@ class PostsScreen extends StatelessWidget {
                   //write a comment
                   Expanded(
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CommentsScreen(
+                              data: PlantsCubit.get(context)
+                                  .forumsModel!
+                                  .data![index]
+                                  .forumComments!,
+                              forumId: PlantsCubit.get(context)
+                                  .forumsModel!
+                                  .data![index]
+                                  .forumId,
+                            ),
+                          ),
+                        );
+                      },
                       child: Row(
                         children: [
                           CircleAvatar(
@@ -456,7 +523,9 @@ class PostsScreen extends StatelessWidget {
                   InkWell(
                     child: Row(
                       children: [
-                        SvgPicture.asset('assets/icons/like.svg'),
+                        SvgPicture.asset(
+                          'assets/icons/like.svg',
+                        ),
                         const SizedBox(
                           width: 5,
                         ),
@@ -664,7 +733,23 @@ class PostsScreen extends StatelessWidget {
                   //write a comment
                   Expanded(
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CommentsScreen(
+                              data: PlantsCubit.get(context)
+                                  .myForumsModel!
+                                  .data![index]
+                                  .forumComments!,
+                              forumId: PlantsCubit.get(context)
+                                  .myForumsModel!
+                                  .data![index]
+                                  .forumId!,
+                            ),
+                          ),
+                        );
+                      },
                       child: Row(
                         children: [
                           CircleAvatar(
@@ -689,7 +774,9 @@ class PostsScreen extends StatelessWidget {
                   InkWell(
                     child: Row(
                       children: [
-                        SvgPicture.asset('assets/icons/like.svg'),
+                        SvgPicture.asset(
+                          'assets/icons/like.svg',
+                        ),
                         const SizedBox(
                           width: 5,
                         ),

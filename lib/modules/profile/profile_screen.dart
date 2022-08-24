@@ -42,12 +42,11 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   child: ClipRRect(
-                    // make sure we apply clip it properly
                     child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
+                      filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7,),
                       child: Container(
                         alignment: Alignment.center,
-                        color: Colors.grey.withOpacity(0.1),
+                        color: Colors.black.withOpacity(0.65),
                         child: Column(
                           children: [
                             Row(

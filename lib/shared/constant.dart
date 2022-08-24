@@ -12,6 +12,7 @@ String GET_FORUMS = '/api/v1/forums';
 String GET_MY_FORUMS = '/api/v1/forums/me';
 String ADD_LIKES = '/api/v1/forums/:forumId/like';
 String ADD_COMMENT = '/api/v1/forums/:forumId/comment';
+String GOOGLE_SIGN = '/api/v1/auth/google';
 
 
 String BASE_URL = 'https://lavie.orangedigitalcenteregypt.com';
