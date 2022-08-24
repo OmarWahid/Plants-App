@@ -1,9 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:plants_orange/modules/home_screen/home_cubit/plants_cubit.dart';
 import 'package:plants_orange/modules/home_screen/home_cubit/plants_states.dart';
+import 'package:plants_orange/modules/posts/search_forums_screen.dart';
 
+import '../../shared/constant.dart';
 import '../../style/colors.dart';
 import 'new_posts_screen.dart';
 
@@ -48,8 +52,8 @@ class PostsScreen extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.only(
                 top: 30.h,
-                left: 24.w,
-                right: 24.w,
+                left: 22.w,
+                right: 22.w,
               ),
               child: Column(
                 children: [
@@ -62,10 +66,11 @@ class PostsScreen extends StatelessWidget {
                     ),
                     child: MaterialButton(
                       onPressed: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => const ()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const SearchForumsScreen()));
                       },
                       elevation: 0,
                       child: Row(
@@ -198,12 +203,18 @@ class PostsScreen extends StatelessWidget {
                   ListView.separated(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) => buildPostItem(
-                            context,
-                          ),
+                      itemBuilder: (context, index) =>
+                          (PlantsCubit.get(context).isAllForums)
+                              ? buildPostItem(context, index)
+                              : buildMyPostItem(context, index),
                       separatorBuilder: (context, index) =>
                           SizedBox(height: 15.h),
-                      itemCount: 5)
+                      itemCount: (PlantsCubit.get(context).isAllForums)
+                          ? PlantsCubit.get(context).forumsModel!.data!.length
+                          : PlantsCubit.get(context)
+                              .myForumsModel!
+                              .data!
+                              .length),
                 ],
               ),
             ),
@@ -214,11 +225,15 @@ class PostsScreen extends StatelessWidget {
               right: 13.w,
             ),
             child: FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                String refresh = await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const NewPostsScreen()));
+                if (refresh == 'refresh') {
+                  PlantsCubit.get(context).getForums();
+                  PlantsCubit.get(context).getMyForums();
+                }
               },
               backgroundColor: PrimaryGreen,
               elevation: 0,
@@ -233,7 +248,7 @@ class PostsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildPostItem(context) => Card(
+  Widget buildPostItem(context, index) => Card(
         elevation: 5,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Padding(
@@ -247,7 +262,7 @@ class PostsScreen extends StatelessWidget {
                   CircleAvatar(
                     radius: 25.r,
                     backgroundImage: const NetworkImage(
-                      'https://img.freepik.com/free-photo/photo-positive-european-female-model-makes-okay-gesture-agrees-with-nice-idea_273609-25629.jpg?w=996&t=st=1660325507~exp=1660326107~hmac=fc7547e965728e2538712a3610492f63c7b890c5bf198db89492e765ab8fd99a',
+                      'https://img.freepik.com/free-photo/waist-up-portrait-handsome-serious-unshaven-male-keeps-hands-together-dressed-dark-blue-shirt-has-talk-with-interlocutor-stands-against-white-wall-self-confident-man-freelancer_273609-16320.jpg?w=996&t=st=1661287053~exp=1661287653~hmac=24fc408af533afa9006d5f47ba23f4ba9deca0c2d0065f4230f223947127524d',
                     ),
                   ),
                   SizedBox(
@@ -259,26 +274,22 @@ class PostsScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         //name & check mark
-                        Row(
-                          children: [
-                            const Text('Omar Wahid'),
-                            SizedBox(
-                              width: 5.w,
-                            ),
-                            Icon(
-                              Icons.check_circle,
-                              color: Colors.blue,
-                              size: 17.w,
-                            )
-                          ],
-                        ),
+                        Text(
+                            '${PlantsCubit.get(context).forumsModel!.data![index].user!.firstName} ${PlantsCubit.get(context).forumsModel!.data![index].user!.lastName}',
+                            style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black,
+                                fontFamily: 'Roboto')),
                         //date and time
                         Text(
                           'Marsh 21 ,2022 at 11:00 pm',
-                          style: Theme.of(context)
-                              .textTheme
-                              .caption
-                              ?.copyWith(height: 1.6),
+                          style: TextStyle(
+                              fontSize: 11.sp,
+                              height: 1.6.h,
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xFF979797),
+                              fontFamily: 'Roboto'),
                         ),
                       ],
                     ),
@@ -302,12 +313,11 @@ class PostsScreen extends StatelessWidget {
                 ),
               ),
               Text(
-                'Facebook',
+                '${PlantsCubit.get(context).forumsModel!.data![index].title}',
                 style: TextStyle(
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.w700,
-                  color: PrimaryGreen
-                ),
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w700,
+                    color: PrimaryGreen),
               ),
               //hashtag text
               Padding(
@@ -316,9 +326,9 @@ class PostsScreen extends StatelessWidget {
                   top: 12.h,
                 ),
                 child: Text(
-                  'Facebook is an online social media and social networking service owned by American company Meta Platforms. Founded in 2004 by Mark Zuckerberg with fellow Harvard College students and roommates ',
+                  '${PlantsCubit.get(context).forumsModel!.data![index].description}',
                   style: TextStyle(
-                    fontSize: 12.sp,
+                    fontSize: 13.sp,
                     fontWeight: FontWeight.w400,
                     color: const Color(0xFF8F8D8D),
                   ),
@@ -327,16 +337,28 @@ class PostsScreen extends StatelessWidget {
               //photo of post
               Padding(
                 padding: EdgeInsets.only(top: 10.h),
-                child: Container(
-                  height: 140,
+                child: SizedBox(
+                  height: 180.h,
                   width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.r),
-                    image: const DecorationImage(
-                        image: NetworkImage(
-                          'https://img.freepik.com/free-photo/close-up-portrait-attractive-young-woman-isolated_273609-35692.jpg?t=st=1660325507~exp=1660326107~hmac=cdcddf49e5c8f2523fd774a0375a8805ebab272ca35ac4b06b6008f5790b18db',
+                  child: Image.network(
+                    '$BASE_URL${PlantsCubit.get(context).forumsModel!.data![index].imageUrl}',
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CupertinoActivityIndicator(
+                          color: PrimaryGreen,
                         ),
-                        fit: BoxFit.cover),
+                      );
+                    },
+                    errorBuilder: (BuildContext context, Object exception,
+                        StackTrace? stackTrace) {
+                      return Image.asset(
+                        'assets/images/beautiful-natural-landscape (1).jpg',
+                        fit: BoxFit.cover,
+                      );
+                    },
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -353,16 +375,12 @@ class PostsScreen extends StatelessWidget {
                           padding: EdgeInsets.symmetric(vertical: 5.h),
                           child: Row(
                             children: [
-                              const Icon(
-                                Icons.favorite_border,
-                                size: 16,
-                                color: Colors.red,
-                              ),
+                              SvgPicture.asset('assets/icons/like.svg'),
                               SizedBox(
                                 width: 5.w,
                               ),
                               Text(
-                                '250',
+                                '${PlantsCubit.get(context).forumsModel!.data![index].forumLikes!.length} Likes',
                                 style: Theme.of(context).textTheme.caption,
                               ),
                             ],
@@ -378,17 +396,17 @@ class PostsScreen extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(
-                                '1200',
-                                style: Theme.of(context).textTheme.caption,
+                              Icon(
+                                Icons.comment_outlined,
+                                size: 18.w,
+                                color: Colors.grey.shade500,
                               ),
                               const SizedBox(
                                 width: 5,
                               ),
-                              const Icon(
-                                Icons.comment_outlined,
-                                size: 16,
-                                color: Colors.amber,
+                              Text(
+                                '${PlantsCubit.get(context).forumsModel!.data![index].forumComments!.length} Replies',
+                                style: Theme.of(context).textTheme.caption,
                               ),
                             ],
                           ),
@@ -419,7 +437,7 @@ class PostsScreen extends StatelessWidget {
                           CircleAvatar(
                             radius: 16.r,
                             backgroundImage: const NetworkImage(
-                              'https://img.freepik.com/free-photo/photo-positive-european-female-model-makes-okay-gesture-agrees-with-nice-idea_273609-25629.jpg?w=996&t=st=1660325507~exp=1660326107~hmac=fc7547e965728e2538712a3610492f63c7b890c5bf198db89492e765ab8fd99a',
+                              'https://img.freepik.com/free-photo/waist-up-portrait-handsome-serious-unshaven-male-keeps-hands-together-dressed-dark-blue-shirt-has-talk-with-interlocutor-stands-against-white-wall-self-confident-man-freelancer_273609-16320.jpg?w=996&t=st=1661287053~exp=1661287653~hmac=24fc408af533afa9006d5f47ba23f4ba9deca0c2d0065f4230f223947127524d',
                             ),
                           ),
                           SizedBox(
@@ -438,11 +456,7 @@ class PostsScreen extends StatelessWidget {
                   InkWell(
                     child: Row(
                       children: [
-                        const Icon(
-                          Icons.favorite_border,
-                          size: 16,
-                          color: Colors.red,
-                        ),
+                        SvgPicture.asset('assets/icons/like.svg'),
                         const SizedBox(
                           width: 5,
                         ),
@@ -452,7 +466,246 @@ class PostsScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      PlantsCubit.get(context).addLike(
+                          id: PlantsCubit.get(context)
+                              .forumsModel!
+                              .data![index]
+                              .forumId!);
+                    },
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      );
+
+  Widget buildMyPostItem(context, index) => Card(
+        elevation: 5,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  //profile photo
+                  CircleAvatar(
+                    radius: 25.r,
+                    backgroundImage: const NetworkImage(
+                      'https://img.freepik.com/free-photo/waist-up-portrait-handsome-serious-unshaven-male-keeps-hands-together-dressed-dark-blue-shirt-has-talk-with-interlocutor-stands-against-white-wall-self-confident-man-freelancer_273609-16320.jpg?w=996&t=st=1661287053~exp=1661287653~hmac=24fc408af533afa9006d5f47ba23f4ba9deca0c2d0065f4230f223947127524d',
+                    ),
+                  ),
+                  SizedBox(
+                    width: 15.w,
+                  ),
+                  //name , check mark & date
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        //name & check mark
+                        Text(
+                            '${PlantsCubit.get(context).myForumsModel!.data![index].user!.firstName} ${PlantsCubit.get(context).myForumsModel!.data![index].user!.lastName}',
+                            style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black,
+                                fontFamily: 'Roboto')),
+                        //date and time
+                        Text(
+                          'Marsh 21 ,2022 at 11:00 pm',
+                          style: TextStyle(
+                              fontSize: 11.sp,
+                              height: 1.6.h,
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xFF979797),
+                              fontFamily: 'Roboto'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  //three dots
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.more_horiz,
+                      size: 18,
+                    ),
+                  ),
+                ],
+              ),
+              //separator
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 15.h),
+                child: Container(
+                  height: 1,
+                  color: Colors.grey[300],
+                ),
+              ),
+              Text(
+                '${PlantsCubit.get(context).myForumsModel!.data![index].title}',
+                style: TextStyle(
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w700,
+                    color: PrimaryGreen),
+              ),
+              //hashtag text
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: 8.h,
+                  top: 12.h,
+                ),
+                child: Text(
+                  '${PlantsCubit.get(context).myForumsModel!.data![index].description}',
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xFF8F8D8D),
+                  ),
+                ),
+              ),
+              //photo of post
+              Padding(
+                padding: EdgeInsets.only(top: 10.h),
+                child: SizedBox(
+                  height: 180.h,
+                  width: double.infinity,
+                  child: Image.network(
+                    '$BASE_URL${PlantsCubit.get(context).myForumsModel!.data![index].imageUrl}',
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CupertinoActivityIndicator(
+                          color: PrimaryGreen,
+                        ),
+                      );
+                    },
+                    errorBuilder: (BuildContext context, Object exception,
+                        StackTrace? stackTrace) {
+                      return Image.asset(
+                        'assets/images/beautiful-natural-landscape (1).jpg',
+                        fit: BoxFit.cover,
+                      );
+                    },
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              //likes and comments
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 10.h,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5.h),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset('assets/icons/like.svg'),
+                              SizedBox(
+                                width: 5.w,
+                              ),
+                              Text(
+                                '${PlantsCubit.get(context).myForumsModel!.data![index].forumLikes!.length} Likes',
+                                style: Theme.of(context).textTheme.caption,
+                              ),
+                            ],
+                          ),
+                        ),
+                        onTap: () {},
+                      ),
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5.h),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Icon(
+                                Icons.comment_outlined,
+                                size: 18.w,
+                                color: Colors.grey.shade500,
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                '${PlantsCubit.get(context).myForumsModel!.data![index].forumComments!.length} Replies',
+                                style: Theme.of(context).textTheme.caption,
+                              ),
+                            ],
+                          ),
+                        ),
+                        onTap: () {},
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              //separator
+              Padding(
+                padding: EdgeInsets.only(bottom: 10.h),
+                child: Container(
+                  height: 1,
+                  color: Colors.grey[300],
+                ),
+              ),
+              //comment like share
+              Row(
+                children: [
+                  //write a comment
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {},
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 16.r,
+                            backgroundImage: const NetworkImage(
+                              'https://img.freepik.com/free-photo/waist-up-portrait-handsome-serious-unshaven-male-keeps-hands-together-dressed-dark-blue-shirt-has-talk-with-interlocutor-stands-against-white-wall-self-confident-man-freelancer_273609-16320.jpg?w=996&t=st=1661287053~exp=1661287653~hmac=24fc408af533afa9006d5f47ba23f4ba9deca0c2d0065f4230f223947127524d',
+                            ),
+                          ),
+                          SizedBox(
+                            width: 15.w,
+                          ),
+                          Text(
+                            'write a comment',
+                            style:
+                                Theme.of(context).textTheme.caption?.copyWith(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  //like button
+                  InkWell(
+                    child: Row(
+                      children: [
+                        SvgPicture.asset('assets/icons/like.svg'),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          'Like',
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      PlantsCubit.get(context).addLike(
+                          id: PlantsCubit.get(context)
+                              .myForumsModel!
+                              .data![index]
+                              .forumId!);
+                    },
                   ),
                 ],
               )

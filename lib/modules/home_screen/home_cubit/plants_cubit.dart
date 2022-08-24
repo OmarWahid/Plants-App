@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:plants_orange/models/all_model.dart';
 import 'package:plants_orange/models/blogs_model.dart';
+import 'package:plants_orange/models/forums_model.dart';
 import 'package:plants_orange/models/plants_model.dart';
 import 'package:plants_orange/models/seeds_model.dart';
 import 'package:plants_orange/models/tools_model.dart';
@@ -449,6 +450,8 @@ class PlantsCubit extends Cubit<PlantsState> {
   bool doneAll = false;
   bool doneUser = false;
   bool doneBlogs = false;
+  bool doneForums = false;
+  bool doneMyForums = false;
 
   SeedsModel? seedsModel;
 
@@ -567,10 +570,10 @@ class PlantsCubit extends Cubit<PlantsState> {
   }
 
   void createPost({
-  required String title,
-  required String description,
-  required String image,
-}){
+    required String title,
+    required String description,
+    required String image,
+  }) {
     emit(CreatePostLoadingState());
     DioHelper.postData(
       url: CREATE_POST,
@@ -582,9 +585,56 @@ class PlantsCubit extends Cubit<PlantsState> {
       },
     ).then((value) {
       print(value.data);
+      Fluttertoast.showToast(
+        msg: 'Post Created Successfully ✔',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0.sp,
+      );
       emit(CreatePostSuccessState());
     }).catchError((onError) {
       emit(CreatePostErrorState(onError.toString()));
+      print(onError.toString());
+    });
+  }
+
+  ForumsModel? forumsModel;
+
+  void getForums() {
+    emit(ForumsLoadingState());
+    DioHelper.getData(
+      url: GET_FORUMS,
+      token: token,
+    ).then((value) {
+      forumsModel = ForumsModel.fromJson(value.data);
+      print(
+          '@@@########### ${forumsModel!.data![0].user!.firstName} ######################## ');
+      doneForums = true;
+      emit(ForumsSuccessState());
+    }).catchError((onError) {
+      emit(ForumsErrorState(onError.toString()));
+      print(onError.toString());
+    });
+  }
+
+  ForumsModel? myForumsModel;
+
+  void getMyForums() {
+    emit(MyForumsLoadingState());
+    DioHelper.getData(
+      url: GET_MY_FORUMS,
+      token: token,
+    ).then((value) {
+      myForumsModel = ForumsModel.fromJson(value.data);
+      print(
+          '@@@########### ${myForumsModel!.data![0].user!.firstName} ######################## ');
+      doneMyForums = true;
+      emit(MyForumsSuccessState());
+    }).catchError((onError) {
+      emit(MyForumsErrorState(onError.toString()));
       print(onError.toString());
     });
   }
@@ -730,9 +780,11 @@ class PlantsCubit extends Cubit<PlantsState> {
       emit(updateCubitDataBase());
     });
   }
+
   void deleteDataBase({required int id}) {
-    database.rawDelete('DELETE FROM carts WHERE id = ?', [id]).then((value) async{
-    await  getDataFromDataBase(database);
+    database
+        .rawDelete('DELETE FROM carts WHERE id = ?', [id]).then((value) async {
+      await getDataFromDataBase(database);
       emit(deleteCubitDataBase());
     });
   }
@@ -741,11 +793,56 @@ class PlantsCubit extends Cubit<PlantsState> {
 
   void pressAllForums() {
     isAllForums = true;
+    print(isAllForums);
     emit(pressAllForumsState());
   }
 
   void pressMeForums() {
     isAllForums = false;
+    print(isAllForums);
+
     emit(pressMeForumsState());
+  }
+
+  void addLike({required String id}) {
+    emit(LikesLoadingState());
+    DioHelper.postData(
+      url: ADD_LIKES,
+      token: token,
+      data: {
+        "forumId": id,
+      },
+      query: {
+        "forumId": id,
+      },
+
+    ).then((value) {
+      getForums();
+      emit(LikesSuccessState());
+    }).catchError((onError) {
+      emit(LikesErrorState(onError.toString()));
+      print(onError.toString());
+    });
+  }
+
+  void addComment({
+    required String id,
+    required String comment,
+  }) {
+    emit(CommentLoadingState());
+    DioHelper.postData(
+      url: ADD_COMMENT,
+      token: token,
+      data: {
+        "forumId": id,
+        "comment": comment,
+      },
+    ).then((value) {
+      getForums();
+      emit(CommentSuccessState());
+    }).catchError((onError) {
+      emit(CommentErrorState(onError.toString()));
+      print(onError.toString());
+    });
   }
 }

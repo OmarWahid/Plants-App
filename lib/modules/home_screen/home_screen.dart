@@ -27,15 +27,14 @@ class HomeScreen extends StatelessWidget {
             cubit.doneTools == false ||
             cubit.doneAll == false ||
             cubit.doneUser == false||
-            cubit.doneBlogs == false) {
+            cubit.doneBlogs == false||
+            cubit.doneForums == false||
+            cubit.doneMyForums == false) {
           return Center(
             child: CircularProgressIndicator(color: PrimaryGreen),
           );
         }
         var width = MediaQuery.of(context).size.width;
-        print(
-          '////////////////////////// $isTimerWorking ////////////////',
-        );
 
         return SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -63,8 +62,8 @@ class HomeScreen extends StatelessWidget {
                             padding: EdgeInsets.only(bottom: 20.h),
                             child: Image.asset(
                               'assets/images/Plant Based Milk.png',
-                              height: 18.h,
-                              width: 27.w,
+                              height: 17.h,
+                              width: 26.w,
                             ),
                           ),
                         ],

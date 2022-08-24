@@ -13,15 +13,17 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
     super.initState();
 
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder:(context) =>  (token!=null) ? const PlantsLayout() : const LoginScreen()
-           ), (route) => false);
+    Future.delayed(const Duration(milliseconds: 1700), () {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  (token != null) ? const PlantsLayout() : const LoginScreen()),
+          (route) => false);
     });
   }
 
@@ -43,7 +45,11 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             Padding(
               padding: EdgeInsets.only(bottom: 20.h),
-              child: Image.asset('assets/images/Plant Based Milk.png'),
+              child: Image.asset(
+                'assets/images/Plant Based Milk.png',
+                height: 17.h,
+                width: 26.w,
+              ),
             ),
           ],
         ),

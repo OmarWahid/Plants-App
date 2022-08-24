@@ -136,8 +136,8 @@ class LoginScreen extends StatelessWidget {
                           padding: EdgeInsets.only(bottom: 20.h),
                           child: Image.asset(
                             'assets/images/Plant Based Milk.png',
-                            height: 18.h,
-                            width: 27.w,
+                            height: 17.h,
+                            width: 26.w,
                           ),
                         ),
                       ],
@@ -794,7 +794,7 @@ class LoginScreen extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: Container(
-                      height: 106.h,
+                      height: 120.h,
                       width: 190.w,
                       decoration: const BoxDecoration(
                         image: DecorationImage(

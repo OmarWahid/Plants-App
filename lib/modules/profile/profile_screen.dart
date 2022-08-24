@@ -32,11 +32,11 @@ class ProfileScreen extends StatelessWidget {
                 Container(
                   height: height * 0.40,
                   width: double.maxFinite,
-                  decoration: const BoxDecoration(
+                  decoration:  BoxDecoration(
                     image: DecorationImage(
                       image:
-                          ExactAssetImage("assets/images/close-up-young.jpg"),
-                      // NetworkImage( '${cubitUser!.data!.imageUrl}'),
+                          // ExactAssetImage("assets/images/close-up-young.jpg"),
+                      NetworkImage( '${cubitUser!.data!.imageUrl}'),
 
                       fit: BoxFit.cover,
                     ),
@@ -65,16 +65,16 @@ class ProfileScreen extends StatelessWidget {
                             ),
                             CircleAvatar(
                               backgroundImage:
-                                  // NetworkImage( '${cubitUser!.data!.imageUrl}'),
-                                  const AssetImage(
-                                      "assets/images/close-up-young.jpg"),
+                                  NetworkImage( '${cubitUser.data!.imageUrl}'),
+                                  // const AssetImage(
+                                  //     "assets/images/close-up-young.jpg"),
                               radius: 80.w,
                             ),
                             SizedBox(
                               height: 14.h,
                             ),
                             Text(
-                              "${cubitUser!.data!.firstName} ${cubitUser.data!.lastName}",
+                              "${cubitUser.data!.firstName} ${cubitUser.data!.lastName}",
                               style: TextStyle(
                                   fontSize: 24.sp,
                                   color: Colors.white,

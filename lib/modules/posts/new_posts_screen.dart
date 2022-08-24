@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,6 +12,7 @@ import 'package:plants_orange/style/colors.dart';
 var titleController = TextEditingController();
 var bodyController = TextEditingController();
 var formKey = GlobalKey<FormState>();
+String urlImage64 = 'data:image/jpeg;base64,';
 
 class NewPostsScreen extends StatefulWidget {
   const NewPostsScreen({Key? key}) : super(key: key);
@@ -35,7 +35,7 @@ class _NewPostsScreenState extends State<NewPostsScreen> {
         _image = File(pickedFile.path);
         bytes = File(pickedFile.path).readAsBytesSync();
         image64 = base64Encode(bytes!);
-        print('@@@@@@@@@@@@@@@@@@@@@@@@@@ $image64');
+
       } else {
         print('No image selected.');
       }
@@ -45,7 +45,14 @@ class _NewPostsScreenState extends State<NewPostsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<PlantsCubit, PlantsState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is CreatePostSuccessState) {
+          Navigator.pop(context, 'refresh');
+          titleController.clear();
+          bodyController.clear();
+          _image = null;
+        }
+      },
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
@@ -200,6 +207,8 @@ class _NewPostsScreenState extends State<NewPostsScreen> {
                     ),
                     TextFormField(
                       autofocus: false,
+                      minLines: 4,
+                      maxLines: 5,
                       controller: bodyController,
                       cursorColor: const Color(0xFF939393),
                       validator: (value) {
@@ -212,9 +221,6 @@ class _NewPostsScreenState extends State<NewPostsScreen> {
                         fontFamily: 'Roboto',
                       ),
                       decoration: InputDecoration(
-                        isDense: true, // important line
-                        contentPadding:
-                            EdgeInsets.fromLTRB(10.w, 108.h, 10.w, 0.h),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.r),
                           borderSide: const BorderSide(
@@ -235,34 +241,39 @@ class _NewPostsScreenState extends State<NewPostsScreen> {
                     SizedBox(
                       height: 40.h,
                     ),
-                    Container(
-                      width: double.infinity,
-                      height: 55.h,
-                      decoration: BoxDecoration(
-                        color: PrimaryGreen,
-                        borderRadius: BorderRadius.circular(10.r),
-                      ),
-                      child: MaterialButton(
-                        onPressed: () {
-                          if (formKey.currentState!.validate()) {
-                            PlantsCubit.get(context).createPost(
-                                title: titleController.text,
-                                description: bodyController.text,
-                                image: image64!
-                            );
-                          }
-                        },
-                        child: Text(
-                          'Post',
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16.sp,
-                            color: Colors.white,
+                    (state is CreatePostLoadingState)
+                        ? Center(
+                            child: CircularProgressIndicator(
+                              color: PrimaryGreen,
+                            ),
+                          )
+                        : Container(
+                            width: double.infinity,
+                            height: 55.h,
+                            decoration: BoxDecoration(
+                              color: PrimaryGreen,
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                            child: MaterialButton(
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  PlantsCubit.get(context).createPost(
+                                      title: titleController.text,
+                                      description: bodyController.text,
+                                      image: urlImage64 + image64!);
+                                }
+                              },
+                              child: Text(
+                                'Post',
+                                style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16.sp,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),

@@ -95,3 +95,27 @@ class CreatePostErrorState extends PlantsState {
   final String error;
   CreatePostErrorState(this.error);
 }
+class ForumsLoadingState extends PlantsState{ }
+class ForumsSuccessState extends PlantsState{ }
+class ForumsErrorState extends PlantsState {
+  final String error;
+  ForumsErrorState(this.error);
+}
+class MyForumsLoadingState extends PlantsState{ }
+class MyForumsSuccessState extends PlantsState{ }
+class MyForumsErrorState extends PlantsState {
+  final String error;
+  MyForumsErrorState(this.error);
+}
+class LikesLoadingState extends PlantsState{ }
+class LikesSuccessState extends PlantsState{ }
+class LikesErrorState extends PlantsState {
+  final String error;
+  LikesErrorState(this.error);
+}
+class CommentLoadingState extends PlantsState{ }
+class CommentSuccessState extends PlantsState{ }
+class CommentErrorState extends PlantsState {
+  final String error;
+  CommentErrorState(this.error);
+}

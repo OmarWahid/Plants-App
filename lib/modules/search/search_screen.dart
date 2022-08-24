@@ -75,6 +75,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 top: 55.h,
               ),
               child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+
                 child: Column(
                   children: [
                     TextFormField(

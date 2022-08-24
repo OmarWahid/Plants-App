@@ -46,7 +46,11 @@ class MyApp extends StatelessWidget {
                 ..getPlants()
                 ..getTools()
                 ..getAll()
-                ..getUser()..getBlogs()..createDataBase(),
+                ..getUser()
+                ..getBlogs()
+                ..createDataBase()
+                ..getForums()
+                ..getMyForums(),
             ),
             BlocProvider(
               create: (context) => LoginCubit(),
